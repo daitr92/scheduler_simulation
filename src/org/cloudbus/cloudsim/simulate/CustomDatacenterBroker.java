@@ -1,5 +1,6 @@
 package org.cloudbus.cloudsim.simulate;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -13,9 +14,16 @@ import org.cloudbus.cloudsim.core.CloudSimTags;
 import org.cloudbus.cloudsim.core.SimEvent;
 
 public class CustomDatacenterBroker extends DatacenterBroker {
+	public static final int STOPPED = 0;
+	public static final int RUNNING = 1;
+	
+	
+	private List<? extends ResCloudlet> estimationList;
+	private int estimationStatus = STOPPED;
 
 	public CustomDatacenterBroker(String name) throws Exception {
 		super(name);
+		setEstimationList(new ArrayList<ResCloudlet>());
 	}
 	
 	@Override
@@ -52,28 +60,11 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 	@Override
 	protected void submitCloudlets() {
 		Log.printLine(this.getName() + " submit Cloudlet");
-
-		for (Cloudlet cloudlet : getCloudletList()) {
-			List<Integer> datacenterList = getDatacenterIdsList();
+		for (Cloudlet cloudlet: getCloudletList()) {
+			Log.printLine("Cloudlet #" + cloudlet.getCloudletId() + " has been submitted!");
 			
-			Log.printLine(CloudSim.clock() + ": " + getName() + ": Send estimation cloudlet " + cloudlet.getCloudletId() 
-					+ " request to all datacenters.");
-			for (Integer datacenter: datacenterList) {
-				ResCloudlet rcl = new ResCloudlet(cloudlet);
-//				rcl.setDatacenterId(datacenter);
-//				sendNow(datacenter, CloudSimTags.CLOUDLET_ESTIMATE, rcl);
-			}
-
-//			getCloudletEstimatingList().add(cloudlet);
-			
-//			EstimationCloudletObserve estimateObserve = new EstimationCloudletObserve(new ResCloudlet(cloudlet), datacenterList);
-//			Map<Integer, EstimationCloudletObserve> cloudletMap = getCloudletMapByBrokerId(getId());
-//			cloudletMap.put(cloudlet.getCloudletId(), estimateObserve);
+			ResCloudlet rcl = new ResCloudlet(cloudlet);
 		}
-		
-//		for (Cloudlet cloudlet: getCloudletEstimatingList()) {
-//			getCloudletList().remove(cloudlet);
-//		}
 	}
 	
 	@Override
@@ -91,6 +82,26 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 	
 	public void addDatacenter(int datacenterId) {
 		getDatacenterIdsList().add(datacenterId);
+	}
+
+
+	public int getEstimationStatus() {
+		return estimationStatus;
+	}
+
+
+	public void setEstimationStatus(int estimationStatus) {
+		this.estimationStatus = estimationStatus;
+	}
+
+
+	public List<? extends ResCloudlet> getEstimationList() {
+		return estimationList;
+	}
+
+
+	public void setEstimationList(List<? extends ResCloudlet> estimationList) {
+		this.estimationList = estimationList;
 	}
 
 }

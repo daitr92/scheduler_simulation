@@ -59,6 +59,11 @@ public class Cloudlet {
 
 	/** The time where this Cloudlet completes. */
 	private double finishTime;
+	
+	/**
+	 * My code
+	 */
+	private double deadlineTime;
 
 	/**
 	 * Start time of executing this Cloudlet. With new functionalities, such as CANCEL, PAUSED and
@@ -178,7 +183,8 @@ public class Cloudlet {
 			final long cloudletOutputSize,
 			final UtilizationModel utilizationModelCpu,
 			final UtilizationModel utilizationModelRam,
-			final UtilizationModel utilizationModelBw) {
+			final UtilizationModel utilizationModelBw,
+			double deadlineTime) {
 		this(
 				cloudletId,
 				cloudletLength,
@@ -188,7 +194,8 @@ public class Cloudlet {
 				utilizationModelCpu,
 				utilizationModelRam,
 				utilizationModelBw,
-				false);
+				false,
+				deadlineTime);
 		vmId = -1;
 		accumulatedBwCost = 0.0;
 		costPerBw = 0.0;
@@ -229,7 +236,8 @@ public class Cloudlet {
 			final UtilizationModel utilizationModelRam,
 			final UtilizationModel utilizationModelBw,
 			final boolean record,
-			final List<String> fileList) {
+			final List<String> fileList,
+			double deadlineTime) {
 		this(
 				cloudletId,
 				cloudletLength,
@@ -239,7 +247,8 @@ public class Cloudlet {
 				utilizationModelCpu,
 				utilizationModelRam,
 				utilizationModelBw,
-				record);
+				record,
+				deadlineTime);
 		vmId = -1;
 		accumulatedBwCost = 0.0;
 		costPerBw = 0.0;
@@ -278,7 +287,8 @@ public class Cloudlet {
 			final UtilizationModel utilizationModelCpu,
 			final UtilizationModel utilizationModelRam,
 			final UtilizationModel utilizationModelBw,
-			final List<String> fileList) {
+			final List<String> fileList,
+			double deadlineTime) {
 		this(
 				cloudletId,
 				cloudletLength,
@@ -288,7 +298,8 @@ public class Cloudlet {
 				utilizationModelCpu,
 				utilizationModelRam,
 				utilizationModelBw,
-				false);
+				false,
+				deadlineTime);
 		vmId = -1;
 		accumulatedBwCost = 0.0;
 		costPerBw = 0.0;
@@ -327,7 +338,8 @@ public class Cloudlet {
 			final UtilizationModel utilizationModelCpu,
 			final UtilizationModel utilizationModelRam,
 			final UtilizationModel utilizationModelBw,
-			final boolean record) {
+			final boolean record,
+			double deadlineTime) {
 		userId = -1;          // to be set by a Broker or user
 		status = CREATED;
 		this.cloudletId = cloudletId;
@@ -336,6 +348,7 @@ public class Cloudlet {
 		finishTime = -1.0;    // meaning this Cloudlet hasn't finished yet
 		classType = 0;
 		netToS = 0;
+		setDeadlineTime(deadlineTime);
 
 		// Cloudlet length, Input and Output size should be at least 1 byte.
 		this.cloudletLength = Math.max(1, cloudletLength);
@@ -1461,6 +1474,14 @@ public class Cloudlet {
 	 */
 	public double getUtilizationOfBw(final double time) {
 		return getUtilizationModelBw().getUtilization(time);
+	}
+
+	public double getDeadlineTime() {
+		return deadlineTime;
+	}
+
+	public void setDeadlineTime(double deadlineTime) {
+		this.deadlineTime = deadlineTime;
 	}
 
 }
