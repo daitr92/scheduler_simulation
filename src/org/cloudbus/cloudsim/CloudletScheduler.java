@@ -70,6 +70,8 @@ public abstract class CloudletScheduler {
 	 * @post $none
 	 */
 	public abstract double cloudletSubmit(Cloudlet gl);
+	
+	public abstract double cloudletEstimate(Cloudlet gl, double fileTransferTime, double mips);
 
 	/**
 	 * Cancels execution of a cloudlet.
