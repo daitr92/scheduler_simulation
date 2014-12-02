@@ -652,7 +652,7 @@ public class DatacenterBroker extends SimEntity {
 		this.datacenterRequestedIdsList = datacenterRequestedIdsList;
 	}
 
-	protected void processPartnerCloudletEstimate(SimEvent ev) {
+	protected void processPartnerCloudletEstimateRequest(SimEvent ev) {
 		// TODO Auto-generated method stub
 		
 	}

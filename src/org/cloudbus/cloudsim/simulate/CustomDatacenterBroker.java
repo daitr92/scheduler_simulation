@@ -57,13 +57,11 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 			case CloudSimTags.END_OF_SIMULATION:
 				shutdownEntity();
 				break;
-				
 			case CloudSimTags.BROKER_ESTIMATE_NEXT_TASK:
 				estimateNextTask();
 				break;
-				
 			case CloudSimTags.BROKER_ESTIMATE_REQUEST:
-				processPartnerCloudletEstimate(ev);
+				processPartnerCloudletEstimateRequest(ev);
 				break;
 
 			// other unknown tags are processed by this method
@@ -82,7 +80,6 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 			Log.printLine("Cloudlet #" + cloudlet.getCloudletId() + " has been submitted!");
 		}
 	}
-	
 	private void addCloudletToEstimationList(Cloudlet cloudlet) {
 		getEstimationList().add(cloudlet);
 		if (estimationStatus == STOPPED) {
@@ -116,16 +113,14 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 			sendNow(datacenterId, CloudSimTags.RESOURCE_CHARACTERISTICS, getId());
 		}
 	}
-
 	//TODO; implement it, i just copy it, 
-	@Override
-	protected void processPartnerCloudletEstimate(SimEvent ev){	
+	@Override	
+	protected void processPartnerCloudletEstimateRequest(SimEvent ev){
 		Map<Integer, Map<Integer, EstimationCloudletObserve>> estimateCloudletMap = getEstimateCloudletMap();
 		if (!estimateCloudletMap.containsKey(ev.getSource())) {
 			Map<Integer, EstimationCloudletObserve> cloudletList = new HashMap<Integer, EstimationCloudletObserve>();
 			estimateCloudletMap.put(ev.getSource(), cloudletList);
 		}
-		
 		Map<Integer, EstimationCloudletObserve> cloudletList = estimateCloudletMap.get(ev.getSource());
 		Cloudlet cloudlet = (Cloudlet) ev.getData();
 		
@@ -133,7 +128,6 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 		for (Integer integer : getDatacenterIdsList()) {
 			datacenterIDs.add(integer);
 		}
-		
 		ResCloudlet resCloudlet = new ResCloudlet(cloudlet);
 		resCloudlet.setFinishTime(Double.MAX_VALUE);
 		
@@ -161,7 +155,6 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 	 * Create list of partner information
 	 * @param List o add Entity on system.
 	 */
-
 	private void buildPartnerInfoList(List<SimEntity> entityList) {
 		for(SimEntity en: entityList){
 			if (en instanceof DatacenterBroker  && en.getId() != getId()) {
@@ -175,7 +168,6 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 			Log.printLine(pt.toString());
 		}
 		Log.printLine("");
-		
 	}
 	
 	/**
