@@ -135,27 +135,6 @@ public class Simulate {
 		
 		int datacenter_quantity = ((Long) d_info.get("quantity")).intValue();
 		
-		List<Host> hostList = new ArrayList<Host>();
-		
-		JSONObject hosts = (JSONObject) d_info.get("hosts");
-		int hosts_quantity = ((Long) hosts.get("quantity")).intValue();
-		for (int i = 0; i < hosts_quantity; i++) {
-			int ram = ((Long) hosts.get("ram")).intValue();
-			long storage = (Long) hosts.get("storage");
-			int bw = ((Long) hosts.get("bw")).intValue();
-			
-			JSONObject pes = (JSONObject) hosts.get("pes");
-			int pes_quantity = ((Long) pes.get("quantity")).intValue();
-			long pes_mips = (Long) pes.get("mips");
-			List<Pe> peList = new ArrayList<Pe>();
-			for (int j = 0; j < pes_quantity; j++) {
-				peList.add(new Pe(j, new PeProvisionerSimple(pes_mips)));
-			}
-			
-			hostList.add(new Host(i, new RamProvisionerSimple(ram), new BwProvisionerSimple(bw), 
-					storage , peList, new VmSchedulerTimeShared(peList)));
-		}
-		
 		String arch = (String) d_info.get("arch");
 		String os = (String) d_info.get("os");
 		String vmm = (String) d_info.get("vmm");
@@ -164,15 +143,36 @@ public class Simulate {
 		double costPerMem = (double) d_info.get("costPerMem");
 		double costPerStorage = (double) d_info.get("costPerStorage");
 		double costPerBw = (double) d_info.get("costPerBw");
+		JSONObject hosts = (JSONObject) d_info.get("hosts");
+		int hosts_quantity = ((Long) hosts.get("quantity")).intValue();
 		
-		LinkedList<Storage> storageList = new LinkedList<Storage>();
+		for (int i = 0; i < datacenter_quantity; i++) {
+			List<Host> hostList = new ArrayList<Host>();
+			
+			for (int j = 0; j < hosts_quantity; j++) {
+				int ram = ((Long) hosts.get("ram")).intValue();
+				long storage = (Long) hosts.get("storage");
+				int bw = ((Long) hosts.get("bw")).intValue();
+				
+				JSONObject pes = (JSONObject) hosts.get("pes");
+				int pes_quantity = ((Long) pes.get("quantity")).intValue();
+				long pes_mips = (Long) pes.get("mips");
+				List<Pe> peList = new ArrayList<Pe>();
+				for (int k = 0; k < pes_quantity; k++) {
+					peList.add(new Pe(k, new PeProvisionerSimple(pes_mips)));
+				}
+				
+				hostList.add(new Host(j, new RamProvisionerSimple(ram), new BwProvisionerSimple(bw), 
+						storage , peList, new VmSchedulerTimeShared(peList)));
+			}
 		
-		DatacenterCharacteristics characteristics = new DatacenterCharacteristics(
-				arch, os, vmm, hostList, time_zone, cost, costPerMem,
-				costPerStorage, costPerBw);
+			LinkedList<Storage> storageList = new LinkedList<Storage>();
+		
+			DatacenterCharacteristics characteristics = new DatacenterCharacteristics(
+					arch, os, vmm, hostList, time_zone, cost, costPerMem,
+					costPerStorage, costPerBw);
 
 		// 6. Finally, we need to create a Datacenter object.
-		for (int i = 0; i < datacenter_quantity; i++) {
 			try {
 				CustomDatacenter datacenter = new CustomDatacenter(name, characteristics,
 						new VmAllocationPolicySimple(hostList), storageList, 0, broker);
