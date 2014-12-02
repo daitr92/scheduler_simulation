@@ -543,6 +543,11 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 		cloudletSubmit(cloudlet, 0);
 		return 0;
 	}
+	
+	@Override
+	public double cloudletEstimate(Cloudlet gl, double fileTransferTime, double mips) {
+		return 0.0;
+	}
 
 	/**
 	 * Gets the status of a cloudlet.

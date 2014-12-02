@@ -398,6 +398,11 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 		cloudlet.setCloudletLength(length);
 		return cloudlet.getCloudletLength() / capacity;
 	}
+	
+	@Override
+	public double cloudletEstimate(Cloudlet gl, double fileTransferTime, double mips) {
+		return 0.0;
+	}
 
 	/*
 	 * (non-Javadoc)
