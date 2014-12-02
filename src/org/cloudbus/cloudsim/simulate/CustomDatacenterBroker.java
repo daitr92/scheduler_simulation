@@ -18,12 +18,12 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 	public static final int RUNNING = 1;
 	
 	
-	private List<? extends ResCloudlet> estimationList;
+	private List<Cloudlet> estimationList;
 	private int estimationStatus = STOPPED;
 
 	public CustomDatacenterBroker(String name) throws Exception {
 		super(name);
-		setEstimationList(new ArrayList<ResCloudlet>());
+		setEstimationList(new ArrayList<Cloudlet>());
 	}
 	
 	@Override
@@ -49,6 +49,10 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 			case CloudSimTags.END_OF_SIMULATION:
 				shutdownEntity();
 				break;
+				
+			case CloudSimTags.BROKER_ESTIMATE_NEXT_TASK:
+				estimateNextTask();
+				break;
 
 			// other unknown tags are processed by this method
 			default:
@@ -61,9 +65,29 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 	protected void submitCloudlets() {
 		Log.printLine(this.getName() + " submit Cloudlet");
 		for (Cloudlet cloudlet: getCloudletList()) {
-			ResCloudlet rcl = new ResCloudlet(cloudlet);
+			addCloudletToEstimationList(cloudlet);
 			
 			Log.printLine("Cloudlet #" + cloudlet.getCloudletId() + " has been submitted!");
+		}
+	}
+	
+	private void addCloudletToEstimationList(Cloudlet cloudlet) {
+		getEstimationList().add(cloudlet);
+		if (estimationStatus == STOPPED) {
+			setEstimationStatus(RUNNING);
+			sendNow(getId(), CloudSimTags.BROKER_ESTIMATE_NEXT_TASK);
+		}
+	}
+	
+	private void estimateNextTask() {
+		if (getEstimationList().isEmpty()) {
+			setEstimationStatus(STOPPED);
+		} else {
+			Cloudlet cloudlet = getEstimationList().get(0);
+			for (Integer datacenterId: getDatacenterIdsList()) {
+				CustomResCloudlet rcl = new CustomResCloudlet(cloudlet);
+				sendNow(datacenterId, CloudSimTags.DATACENTER_ESTIMATE_TASK, rcl);
+			}
 		}
 	}
 	
@@ -95,12 +119,12 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 	}
 
 
-	public List<? extends ResCloudlet> getEstimationList() {
+	public List<Cloudlet> getEstimationList() {
 		return estimationList;
 	}
 
 
-	public void setEstimationList(List<? extends ResCloudlet> estimationList) {
+	public void setEstimationList(List<Cloudlet> estimationList) {
 		this.estimationList = estimationList;
 	}
 
