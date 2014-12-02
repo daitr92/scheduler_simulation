@@ -8,7 +8,6 @@ import java.util.Map;
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.DatacenterBroker;
 import org.cloudbus.cloudsim.DatacenterCharacteristics;
-import org.cloudbus.cloudsim.EstimationCloudletOfPartner;
 import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.ResCloudlet;
 import org.cloudbus.cloudsim.core.CloudSim;
@@ -129,10 +128,12 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 		CustomResCloudlet rCl = new CustomResCloudlet(cl); 
 		List<Integer> partnerIdsList  = new ArrayList<Integer>();
 		for( PartnerInfomation partnerInfo : this.getPartnersList()){
-				Log.printLine(CloudSim.clock()+ ": "+ getName()+": #"+ getId() +" Cloudlet #"+ cl.getCloudletId()+ " have been send to broker #"+partnerInfo.getPartnerId());
-				//send to partner
-				send(partnerInfo.getPartnerId(), 0, CloudSimTags.PARTNER_ESTIMATE_REQUEST, cl);
-				partnerIdsList.add(partnerInfo.getPartnerId());
+			partnerInfo.updateLenghtRatio(cl.getCloudletLength(),0);
+			
+			Log.printLine(CloudSim.clock()+ ": "+ getName()+": #"+ getId() +" Cloudlet #"+ cl.getCloudletId()+ " have been send to broker #"+partnerInfo.getPartnerId());
+			//send to partner
+			send(partnerInfo.getPartnerId(), 0, CloudSimTags.PARTNER_ESTIMATE_REQUEST, cl);
+			partnerIdsList.add(partnerInfo.getPartnerId());
 		}
 		EstimationCloudletOfPartner esOfPatner = new EstimationCloudletOfPartner(rCl, partnerIdsList);
 		getEstimateCloudletofParnerMap().put(rCl.getCloudletId(), esOfPatner);
