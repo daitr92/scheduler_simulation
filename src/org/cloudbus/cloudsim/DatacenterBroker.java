@@ -660,5 +660,8 @@ public class DatacenterBroker extends SimEntity {
 		// TODO Auto-generated method stub
 		
 	}
+	protected void processReturnEstimateFromPartner(SimEvent ev) {
+		// TODO Auto-generated method stub
+	}
 
 }

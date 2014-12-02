@@ -8,7 +8,9 @@ import java.util.Map;
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.DatacenterBroker;
 import org.cloudbus.cloudsim.DatacenterCharacteristics;
+import org.cloudbus.cloudsim.EstimationCloudletOfPartner;
 import org.cloudbus.cloudsim.Log;
+import org.cloudbus.cloudsim.ResCloudlet;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.CloudSimTags;
 import org.cloudbus.cloudsim.core.SimEntity;
@@ -63,7 +65,11 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 			/* handle request estimate from partner **/
 			case CloudSimTags.PARTNER_ESTIMATE_REQUEST:
 				handlerPartnerCloudletEstimateRequest(ev);
-			break;
+				break;
+			//if the cloudle estimate result returned from partner
+			case CloudSimTags.PARTNER_ESTIMATE_RETURN: 
+				processReturnEstimateFromPartner(ev);
+				break;
 
 			// other unknown tags are processed by this method
 			default:
@@ -71,7 +77,7 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 				break;
 		}
 	}
-	
+
 	@Override
 	protected void submitCloudlets() {
 		Log.printLine(this.getName() + " submit Cloudlet");
@@ -119,6 +125,7 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 	protected void processPartnerCloudletInternalEstimateRequest(SimEvent ev){
 		//TODO: not implement ratio
 		Cloudlet cl = (Cloudlet) ev.getData();
+		cl.setUserId(getId());
 		CustomResCloudlet rCl = new CustomResCloudlet(cl); 
 		List<Integer> partnerIdsList  = new ArrayList<Integer>();
 		for( PartnerInfomation partnerInfo : this.getPartnersList()){
@@ -138,7 +145,38 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 	 */
 	@Override
 	public void handlerPartnerCloudletEstimateRequest(SimEvent ev){
-		//TODO
+		Cloudlet cl = (Cloudlet) ev.getData();
+		this.addCloudletToEstimationList(cl);
+		//DO MORE HERE
+	}
+	/**
+	 * receive estimate result from partner
+	 * @param ev
+	 */
+	@Override
+	protected void processReturnEstimateFromPartner(SimEvent ev) {
+		//TODO cloudlet not have finish time
+		Cloudlet cl =(Cloudlet) ev.getData();
+		Integer clouletId = cl.getCloudletId();
+		Integer partnerId =  ev.getSource();
+		CustomResCloudlet crl = new CustomResCloudlet(cl);
+		Log.printLine(CloudSim.clock() + ": " + getName() + ": Received estimate result from Broker #" + ev.getSource());
+		EstimationCloudletOfPartner partnerCloudletEstimateList = getEstimateCloudletofParnerMap().get(clouletId);
+		if (partnerCloudletEstimateList.getPartnerIdsList().contains(partnerId)) {
+			partnerCloudletEstimateList.receiveEstimateResult(partnerId, crl);
+			if (partnerCloudletEstimateList.isFinished()) {
+				// send result to partner
+				ResCloudlet resCloudlet = partnerCloudletEstimateList.getResCloudlet();
+				Log.printLine(resCloudlet.getClouddletFinishTime());
+				Log.printLine(resCloudlet.getCloudlet().getDeadlineTime());
+				if(resCloudlet.getClouddletFinishTime() < resCloudlet.getCloudlet().getDeadlineTime()){
+					sendNow(partnerId, CloudSimTags.PARTNER_EXEC, partnerCloudletEstimateList.getResCloudlet().getCloudlet());
+				} else {
+					Log.printLine(CloudSim.clock()+ " can not send cloudlet #"+resCloudlet.getCloudletId()+ " to any where, timeout");
+					sendNow(getId(), CloudSimTags.CLOUDLET_RETURN, partnerCloudletEstimateList.getResCloudlet().getCloudlet());
+				}
+			}
+		}
 	}
 	
 	public void addDatacenter(int datacenterId) {

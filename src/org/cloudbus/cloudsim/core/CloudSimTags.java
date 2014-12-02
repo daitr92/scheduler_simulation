@@ -276,6 +276,12 @@ public class CloudSimTags {
 	
 	public static final int PARTNER_INTERNAL_ESTIMATE_REQUEST = BASE + 52;
 	
+	public static final int PARTNER_ESTIMATE_RETURN = BASE + 53;
+	
+	public static final int PARTNER_EXEC = BASE + 54;
+	
+	
+	
 
 	/** Private Constructor */
 	private CloudSimTags() {
