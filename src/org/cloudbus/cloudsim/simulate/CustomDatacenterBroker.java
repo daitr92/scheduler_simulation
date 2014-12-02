@@ -92,7 +92,6 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 		Log.printLine(this.getName() + " submit Cloudlet");
 		for (Cloudlet cloudlet: getCloudletList()) {
 			addCloudletToEstimationList(cloudlet);
-			
 			Log.printLine("Cloudlet #" + cloudlet.getCloudletId() + " has been submitted!");
 		}
 	}
@@ -201,14 +200,12 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 		CustomResCloudlet rCl = new CustomResCloudlet(cl); 
 		List<Integer> partnerIdsList  = new ArrayList<Integer>();
 		for( PartnerInfomation partnerInfo : this.getPartnersList()){
-			partnerInfo.updateLenghtRatio(cl.getCloudletLength(),0);
-			
 			Log.printLine(CloudSim.clock()+ ": "+ getName()+": #"+ getId() +" Cloudlet #"+ cl.getCloudletId()+ " have been send to broker #"+partnerInfo.getPartnerId());
 			//send to partner
 			send(partnerInfo.getPartnerId(), 0, CloudSimTags.PARTNER_ESTIMATE_REQUEST, cl);
 			partnerIdsList.add(partnerInfo.getPartnerId());
 		}
-		EstimationCloudletOfPartner esOfPatner = new EstimationCloudletOfPartner(rCl, partnerIdsList);
+		EstimationCloudletOfPartner esOfPatner = new EstimationCloudletOfPartner(rCl, partnerIdsList,getPartnersList());
 		getEstimateCloudletofParnerMap().put(rCl.getCloudletId(), esOfPatner);
 	}		
 		

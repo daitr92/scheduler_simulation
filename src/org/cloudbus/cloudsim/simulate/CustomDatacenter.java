@@ -40,7 +40,6 @@ public class CustomDatacenter extends Datacenter {
 				srcId = ((Integer) ev.getData()).intValue();
 				sendNow(srcId, ev.getTag(), getCharacteristics());
 				break;
-
 			// Resource dynamic info inquiry
 			case CloudSimTags.RESOURCE_DYNAMICS:
 				srcId = ((Integer) ev.getData()).intValue();
