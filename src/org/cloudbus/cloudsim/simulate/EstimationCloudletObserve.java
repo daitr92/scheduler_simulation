@@ -6,10 +6,10 @@ import org.cloudbus.cloudsim.ResCloudlet;
 
 public class EstimationCloudletObserve {
 	private List<Integer> datacenterList;
-	private ResCloudlet resCloudlet;
+	private CustomResCloudlet resCloudlet;
 	private int datacenterIdOFCurrrentExecVm;
 	
-	public EstimationCloudletObserve(ResCloudlet resCloudlet, List<Integer> datacenterList) {
+	public EstimationCloudletObserve(CustomResCloudlet resCloudlet, List<Integer> datacenterList) {
 		this.datacenterList = datacenterList;
 		this.resCloudlet = resCloudlet;
 		this.setDatacenterIdOFCurrrentExecVm(-1);
@@ -27,11 +27,11 @@ public class EstimationCloudletObserve {
 		return resCloudlet;
 	}
 	
-	public void setResCloudlet(ResCloudlet resCloudlet) {
+	public void setResCloudlet(CustomResCloudlet resCloudlet) {
 		this.resCloudlet = resCloudlet;
 	}
 	//if resturn datacenterID that will be cancel exec;
-	public int receiveEstimateResult(int datacenterID, ResCloudlet reResCloudlet,Boolean result) {
+	public int receiveEstimateResult(int datacenterID, CustomResCloudlet reResCloudlet,Boolean result) {
 		int DatacenterCancelExec = datacenterID;
 		int totalDatacenter = datacenterList.size();
 		for (int i = 0; i < totalDatacenter; i++) {
