@@ -271,6 +271,12 @@ public class CloudSimTags {
 	public static final int BROKER_ESTIMATE_NEXT_TASK = BASE + 49;
 	
 	public static final int DATACENTER_ESTIMATE_TASK = BASE + 50;
+	
+	public static final int BROKER_ESTIMATE_RETURN = BASE + 51;
+	
+	public static final int DATACENTER_EXEC_TASK = BASE + 52;
+	
+	public static final int DATACENTER_CANCEL_ESTIMATED_TASK = BASE + 53;
 
 	/** Private Constructor */
 	private CloudSimTags() {

@@ -44,7 +44,7 @@ public class Simulate {
 	 * @param args
 	 *            the args
 	 */
-	@SuppressWarnings("unused")
+//	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		Log.printLine("Starting CloudSimExample1...");
 		brokersList = new ArrayList<DatacenterBroker>();

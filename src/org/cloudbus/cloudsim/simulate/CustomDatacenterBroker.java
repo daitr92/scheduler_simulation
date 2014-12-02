@@ -3,12 +3,12 @@ package org.cloudbus.cloudsim.simulate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.DatacenterBroker;
 import org.cloudbus.cloudsim.DatacenterCharacteristics;
 import org.cloudbus.cloudsim.Log;
-import org.cloudbus.cloudsim.ResCloudlet;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.CloudSimTags;
 import org.cloudbus.cloudsim.core.SimEvent;
@@ -17,13 +17,16 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 	public static final int STOPPED = 0;
 	public static final int RUNNING = 1;
 	
+	private Map<Integer, Map<Integer, EstimationCloudletObserve>> cloudletEstimateObserveMap;
 	
 	private List<Cloudlet> estimationList;
+	
 	private int estimationStatus = STOPPED;
 
 	public CustomDatacenterBroker(String name) throws Exception {
 		super(name);
 		setEstimationList(new ArrayList<Cloudlet>());
+		setCloudletEstimateObserveMap(new HashMap<Integer, Map<Integer, EstimationCloudletObserve>>());
 	}
 	
 	@Override
@@ -52,6 +55,10 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 				
 			case CloudSimTags.BROKER_ESTIMATE_NEXT_TASK:
 				estimateNextTask();
+				break;
+				
+			case CloudSimTags.BROKER_ESTIMATE_RETURN:
+				processInternalEstimateReturn(ev);
 				break;
 
 			// other unknown tags are processed by this method
@@ -84,9 +91,71 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 			setEstimationStatus(STOPPED);
 		} else {
 			Cloudlet cloudlet = getEstimationList().get(0);
+			createCloudletObserve(cloudlet);
+			
 			for (Integer datacenterId: getDatacenterIdsList()) {
 				CustomResCloudlet rcl = new CustomResCloudlet(cloudlet);
 				sendNow(datacenterId, CloudSimTags.DATACENTER_ESTIMATE_TASK, rcl);
+			}
+		}
+	}
+	
+	private void createCloudletObserve(Cloudlet cloudlet) {
+		int owner = cloudlet.getUserId();
+		
+		Map<Integer, EstimationCloudletObserve> observeMap;
+		
+		if (getCloudletEstimateObserveMap().containsKey(owner)) {
+			observeMap = getCloudletEstimateObserveMap().get(owner);
+		} else {
+			observeMap = new HashMap<Integer, EstimationCloudletObserve>(); 
+			getCloudletEstimateObserveMap().put(owner, observeMap);
+		}
+		
+		EstimationCloudletObserve observe;
+		if (observeMap.containsKey(cloudlet.getCloudletId())) {
+			observe = observeMap.get(cloudlet.getCloudletId());
+		} else {
+			observe = new EstimationCloudletObserve(new CustomResCloudlet(cloudlet), new ArrayList<>(getDatacenterIdsList()));
+			observeMap.put(cloudlet.getCloudletId(), observe);
+		}
+	}
+	
+	protected void processInternalEstimateReturn(SimEvent ev) {
+		Log.printLine(getName() + ": Receive internal response from datacenter #" + ev.getSource());
+		CustomResCloudlet re_rcl = (CustomResCloudlet) ev.getData();
+		
+		if (getCloudletEstimateObserveMap().containsKey(re_rcl.getUserId())) {
+			Map<Integer, EstimationCloudletObserve> obserMap = getCloudletEstimateObserveMap().get(re_rcl.getUserId());
+			EstimationCloudletObserve observe = obserMap.get(re_rcl.getCloudletId());
+			observe.receiveEstimateResult(ev.getSource(), re_rcl);
+			
+			if (observe.isFinished()) {
+				if (observe.isExecable()) {
+					// TODO send request to exec
+					Log.printLine(getName() + ": WE CAN EXEC THIS CLOUDLET");
+//					CustomResCloudlet rcl = observe.getResCloudlet();
+//					sendExecRequest(rcl.getBestDatacenterId(), rcl.getBestVmId(), rcl);
+				} else {
+					// TODO send request to partner
+					Log.printLine(getName() + ": WE NEED HELP FROM PARTNER"); 
+				}
+				
+				getEstimationList().remove(0);
+				sendNow(getId(), CloudSimTags.BROKER_ESTIMATE_NEXT_TASK);
+			}
+		}
+	}
+	
+
+	private void sendExecRequest(int targetDatacenterId, int vmId, CustomResCloudlet rcl) {
+		rcl.getCloudlet().setVmId(vmId);
+		
+		for (int datacenterId: getDatacenterIdsList()) {
+			if (datacenterId == targetDatacenterId) {
+				sendNow(datacenterId, CloudSimTags.DATACENTER_EXEC_TASK, vmId);
+			} else {
+				sendNow(datacenterId, CloudSimTags.DATACENTER_CANCEL_ESTIMATED_TASK, vmId);
 			}
 		}
 	}
@@ -126,6 +195,15 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 
 	public void setEstimationList(List<Cloudlet> estimationList) {
 		this.estimationList = estimationList;
+	}
+
+	public Map<Integer, Map<Integer, EstimationCloudletObserve>> getCloudletEstimateObserveMap() {
+		return cloudletEstimateObserveMap;
+	}
+
+	public void setCloudletEstimateObserveMap(
+			Map<Integer, Map<Integer, EstimationCloudletObserve>> cloudletEstimateObserveMap) {
+		this.cloudletEstimateObserveMap = cloudletEstimateObserveMap;
 	}
 
 }
