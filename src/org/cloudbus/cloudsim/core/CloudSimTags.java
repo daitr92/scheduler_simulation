@@ -271,17 +271,20 @@ public class CloudSimTags {
 	public static final int BROKER_ESTIMATE_NEXT_TASK = BASE + 49;
 	
 	public static final int DATACENTER_ESTIMATE_TASK = BASE + 50;
+
+	public static final int BROKER_ESTIMATE_RETURN = BASE + 51;
 	
-	public static final int PARTNER_ESTIMATE_REQUEST = BASE + 51;
+	public static final int DATACENTER_EXEC_TASK = BASE + 52;
 	
-	public static final int PARTNER_INTERNAL_ESTIMATE_REQUEST = BASE + 52;
+	public static final int DATACENTER_CANCEL_ESTIMATED_TASK = BASE + 53;
+
+	public static final int PARTNER_ESTIMATE_REQUEST = BASE + 54;
 	
-	public static final int PARTNER_ESTIMATE_RETURN = BASE + 53;
+	public static final int PARTNER_INTERNAL_ESTIMATE_REQUEST = BASE + 55;
 	
-	public static final int PARTNER_EXEC = BASE + 54;
+	public static final int PARTNER_ESTIMATE_RETURN = BASE + 56;
 	
-	
-	
+	public static final int PARTNER_EXEC = BASE + 57;
 
 	/** Private Constructor */
 	private CloudSimTags() {

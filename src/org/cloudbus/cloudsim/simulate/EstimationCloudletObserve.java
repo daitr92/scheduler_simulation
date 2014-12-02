@@ -2,8 +2,6 @@ package org.cloudbus.cloudsim.simulate;
 
 import java.util.List;
 
-import org.cloudbus.cloudsim.ResCloudlet;
-
 public class EstimationCloudletObserve {
 	private List<Integer> datacenterList;
 	private CustomResCloudlet resCloudlet;
@@ -23,16 +21,17 @@ public class EstimationCloudletObserve {
 		this.datacenterList = datacenterList;
 	}
 	
-	public ResCloudlet getResCloudlet() {
+	public CustomResCloudlet getResCloudlet() {
 		return resCloudlet;
 	}
 	
 	public void setResCloudlet(CustomResCloudlet resCloudlet) {
 		this.resCloudlet = resCloudlet;
 	}
+	
 	//if resturn datacenterID that will be cancel exec;
-	public int receiveEstimateResult(int datacenterID, CustomResCloudlet reResCloudlet,Boolean result) {
-		int DatacenterCancelExec = datacenterID;
+	public void receiveEstimateResult(int datacenterID, CustomResCloudlet reResCloudlet) {
+		
 		int totalDatacenter = datacenterList.size();
 		for (int i = 0; i < totalDatacenter; i++) {
 			if (datacenterList.get(i) == datacenterID) {
@@ -40,30 +39,22 @@ public class EstimationCloudletObserve {
 				break;
 			}
 		}
-//		if(reResCloudlet.getCloudlet().getDeadline() >= reResCloudlet.getClouddletFinishTime()  ){
-			double finishTime = reResCloudlet.getClouddletFinishTime();
-			double bestFinishTime = resCloudlet.getClouddletFinishTime();
-//			Log.printLine(finishTime);
-//			Log.printLine(bestFinishTime);
-//			Log.printLine("-----------------------------------------------------------------");
-//			Log.printLine(resCloudlet.getClouddletFinishTime());
-//			Log.printLine(DatacenterCancelExec);
-			if (finishTime > 0 && finishTime < bestFinishTime) {
-				DatacenterCancelExec = getDatacenterIdOFCurrrentExecVm();
-				setNewVmToExce(datacenterID,finishTime,reResCloudlet);
-			}
-//		}
-		return DatacenterCancelExec;
+		
+		double bestFinishTime = reResCloudlet.getBestFinishTime();
+		
+		if (bestFinishTime < resCloudlet.getCloudlet().getDeadlineTime() && bestFinishTime < resCloudlet.getBestFinishTime()) {
+			resCloudlet.setBestFinishTime(bestFinishTime);
+			resCloudlet.setBestDatacenterId(datacenterID);
+			resCloudlet.setBestVmId(reResCloudlet.getBestVmId());
+		}
 	}
 	
-	private void setNewVmToExce(int datacenterID,double finishTime, ResCloudlet reResCloudlet) {
-		setDatacenterIdOFCurrrentExecVm(datacenterID);
-		resCloudlet.setFinishTime(finishTime);
-		resCloudlet.getCloudlet().setVmId(reResCloudlet.getCloudlet().getVmId()); 
-	}
-
 	public boolean isFinished() {
 		return datacenterList.size() == 0;
+	}
+	
+	public boolean isExecable() {
+		return resCloudlet.getBestFinishTime() <= resCloudlet.getCloudlet().getDeadlineTime();
 	}
 
 	public int getDatacenterIdOFCurrrentExecVm() {

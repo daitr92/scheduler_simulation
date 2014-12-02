@@ -34,7 +34,7 @@ import org.json.simple.parser.JSONParser;
  */
 public class Simulate {
 	
-	private static final String filePath = "/home/ngtrieuvi92/zz/scheduler_simulation/src/org/cloudbus/cloudsim/simulate/testcase.json";
+	private static final String filePath = "C:\\Users\\Kahn\\Desktop\\testcase.json";
 	
 	private static List<DatacenterBroker> brokersList;
 
@@ -44,7 +44,7 @@ public class Simulate {
 	 * @param args
 	 *            the args
 	 */
-	@SuppressWarnings("unused")
+//	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		Log.printLine("Starting CloudSimExample1...");
 		brokersList = new ArrayList<DatacenterBroker>();

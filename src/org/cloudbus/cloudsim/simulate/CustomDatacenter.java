@@ -164,6 +164,14 @@ public class CustomDatacenter extends Datacenter {
 			case CloudSimTags.DATACENTER_ESTIMATE_TASK:
 				estimateTask(ev);
 				break;
+				
+			case CloudSimTags.DATACENTER_CANCEL_ESTIMATED_TASK:
+				cancelEstimateTask(ev);
+				break;
+				
+			case CloudSimTags.DATACENTER_EXEC_TASK:
+				processTask(ev);
+				break;
 
 			// other unknown tags are processed by this method
 			default:
@@ -179,10 +187,65 @@ public class CustomDatacenter extends Datacenter {
 		// time to transfer the files
 		double fileTransferTime = predictFileTransferTime(cl.getRequiredFiles());
 		
+		double bestFinishTime = Double.MAX_VALUE;
+		Vm bestVm = null;
+		
 		for (Vm vm: getVmList()) {
 			CloudletScheduler scheduler = vm.getCloudletScheduler();
 			double mips = vm.getMips();
 			double estimatedFinishTime = scheduler.cloudletEstimate(cl, fileTransferTime, mips);
+			
+			if (estimatedFinishTime < bestFinishTime) {
+				vm.getCloudletScheduler().setLastEstimated(null);
+				bestFinishTime = estimatedFinishTime;
+				bestVm = vm;
+				bestVm.getCloudletScheduler().setLastEstimated(rcl);
+			}
+		}
+		
+		rcl.setBestFinishTime(bestFinishTime);
+		if (bestVm != null) {
+			rcl.setBestVmId(bestVm.getId());
+		} else {
+			rcl.setBestVmId(-1);
+		}
+		
+		sendNow(ev.getSource(), CloudSimTags.BROKER_ESTIMATE_RETURN, rcl);
+	}
+	
+	private void cancelEstimateTask(SimEvent ev) {
+		int vmId = (int) ev.getData();
+		for (Vm vm: getVmList()) {
+			if (vm.getId() == vmId) {
+				vm.getCloudletScheduler().setLastEstimated(null);
+				break;
+			}
+		}
+	}
+	
+	@Override
+	protected void checkCloudletCompletion() {
+		List<? extends Host> list = getVmAllocationPolicy().getHostList();
+		for (int i = 0; i < list.size(); i++) {
+			Host host = list.get(i);
+			for (Vm vm : host.getVmList()) {
+				while (vm.getCloudletScheduler().isFinishedCloudlets()) {
+					Cloudlet cl = vm.getCloudletScheduler().getNextFinishedCloudlet();
+					if (cl != null) {
+						sendNow(getDatacenterBrokerId(), CloudSimTags.CLOUDLET_RETURN, cl);
+					}
+				}
+			}
+		}
+	}
+	
+	private void processTask(SimEvent ev) {
+		int vmId = (int) ev.getData();
+		for (Vm vm: getVmList()) {
+			if (vm.getId() == vmId) {
+				// TODO add last estimate cloudlet to exec or waiting
+				break;
+			}
 		}
 	}
 

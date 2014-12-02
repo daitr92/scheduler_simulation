@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.cloudbus.cloudsim.core.CloudSim;
+import org.cloudbus.cloudsim.simulate.CustomResCloudlet;
 
 /**
  * CloudletSchedulerSpaceShared implements a policy of scheduling performed by a virtual machine. It
@@ -43,6 +44,8 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 
 	/** The used PEs. */
 	protected int usedPes;
+	
+	private double mips;
 
 	/**
 	 * Creates a new CloudletSchedulerSpaceShared object. This method must be invoked before
@@ -401,7 +404,22 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 	
 	@Override
 	public double cloudletEstimate(Cloudlet gl, double fileTransferTime, double mips) {
-		return 0.0;
+		double extraSize = mips * fileTransferTime;
+		long length = gl.getCloudletLength();
+		length += extraSize;
+		double exec_time = length / mips;
+		
+		if (!getCloudletWaitingList().isEmpty()) {
+			List<CustomResCloudlet> waitingList = getCloudletWaitingList();
+			CustomResCloudlet last_rcl = waitingList.get(waitingList.size() - 1);
+			return last_rcl.getClouddletFinishTime() + exec_time;
+		} else if (!getCloudletExecList().isEmpty()) {
+			List<CustomResCloudlet> execList = getCloudletExecList();
+			CustomResCloudlet last_rcl = execList.get(execList.size() - 1);
+			return last_rcl.getClouddletFinishTime() + exec_time;
+		} else {
+			return exec_time;
+		}
 	}
 
 	/*
@@ -670,4 +688,11 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 		return 0;
 	}
 
+	public double getMips() {
+		return mips;
+	}
+
+	public void setMips(double mips) {
+		this.mips = mips;
+	}
 }

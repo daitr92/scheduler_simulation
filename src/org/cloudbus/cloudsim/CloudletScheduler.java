@@ -10,6 +10,8 @@ package org.cloudbus.cloudsim;
 
 import java.util.List;
 
+import org.cloudbus.cloudsim.simulate.CustomResCloudlet;
+
 /**
  * CloudletScheduler is an abstract class that represents the policy of scheduling performed by a
  * virtual machine. So, classes extending this must execute Cloudlets. Also, the interface for
@@ -26,6 +28,8 @@ public abstract class CloudletScheduler {
 
 	/** The current mips share. */
 	private List<Double> currentMipsShare;
+	
+	private CustomResCloudlet lastEstimated = null;
 
 	/**
 	 * Creates a new CloudletScheduler object. This method must be invoked before starting the
@@ -248,6 +252,14 @@ public abstract class CloudletScheduler {
 	 */
 	public List<Double> getCurrentMipsShare() {
 		return currentMipsShare;
+	}
+
+	public CustomResCloudlet getLastEstimated() {
+		return lastEstimated;
+	}
+
+	public void setLastEstimated(CustomResCloudlet lastEstimated) {
+		this.lastEstimated = lastEstimated;
 	}
 
 }
