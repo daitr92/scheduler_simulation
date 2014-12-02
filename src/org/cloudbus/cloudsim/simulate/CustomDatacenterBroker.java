@@ -2,7 +2,6 @@ package org.cloudbus.cloudsim.simulate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +9,6 @@ import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.DatacenterBroker;
 import org.cloudbus.cloudsim.DatacenterCharacteristics;
 import org.cloudbus.cloudsim.Log;
-import org.cloudbus.cloudsim.ResCloudlet;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.CloudSimTags;
 import org.cloudbus.cloudsim.core.SimEntity;
@@ -20,18 +18,16 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 	public static final int STOPPED = 0;
 	public static final int RUNNING = 1;
 	
-	
-	
 	private List<Cloudlet> estimationList;
 	private int estimationStatus = STOPPED;
+	private List<PartnerInfomation> partnersList = new ArrayList<PartnerInfomation>();
+	protected Map<Integer,EstimationCloudletOfPartner> estimateCloudletofParnerMap;
 	
-	protected Map<Integer, Map<Integer, EstimationCloudletObserve>> estimateCloudletMap;
-	private List<PartnerInfomation> partnersList = new ArrayList<PartnerInfomation>();  
-
 	public CustomDatacenterBroker(String name) throws Exception {
 		super(name);
 		setEstimationList(new ArrayList<Cloudlet>());
 		setPartnersList(new ArrayList<PartnerInfomation>());
+		setEstimateCloudletofParnerMap(new HashMap<Integer, EstimationCloudletOfPartner>());
 	}
 	
 	@Override
@@ -60,9 +56,14 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 			case CloudSimTags.BROKER_ESTIMATE_NEXT_TASK:
 				estimateNextTask();
 				break;
-			case CloudSimTags.BROKER_ESTIMATE_REQUEST:
-				processPartnerCloudletEstimateRequest(ev);
+			/* handle request send task to partner estimate form my datacenter  **/
+			case CloudSimTags.PARTNER_INTERNAL_ESTIMATE_REQUEST:
+				processPartnerCloudletInternalEstimateRequest(ev);
 				break;
+			/* handle request estimate from partner **/
+			case CloudSimTags.PARTNER_ESTIMATE_REQUEST:
+				handlerPartnerCloudletEstimateRequest(ev);
+			break;
 
 			// other unknown tags are processed by this method
 			default:
@@ -103,48 +104,41 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 	@Override
 	protected void processResourceCharacteristicsRequest(SimEvent ev) {
 		setDatacenterCharacteristicsList(new HashMap<Integer, DatacenterCharacteristics>());
-	
 		buildPartnerInfoList(CloudSim.getEntityList());
-
 		Log.printLine(CloudSim.clock() + ": " + getName() + ": Cloud Resource List received with "
 				+ getDatacenterIdsList().size() + " resource(s)");
-
 		for (Integer datacenterId : getDatacenterIdsList()) {
 			sendNow(datacenterId, CloudSimTags.RESOURCE_CHARACTERISTICS, getId());
 		}
 	}
-	//TODO; implement it, i just copy it, 
+	/**
+	 * Receive request estimate from own datacenter, process to send it to partner
+	 * 
+	 */
 	@Override	
-	protected void processPartnerCloudletEstimateRequest(SimEvent ev){
-		Map<Integer, Map<Integer, EstimationCloudletObserve>> estimateCloudletMap = getEstimateCloudletMap();
-		if (!estimateCloudletMap.containsKey(ev.getSource())) {
-			Map<Integer, EstimationCloudletObserve> cloudletList = new HashMap<Integer, EstimationCloudletObserve>();
-			estimateCloudletMap.put(ev.getSource(), cloudletList);
+	protected void processPartnerCloudletInternalEstimateRequest(SimEvent ev){
+		//TODO: not implement ratio
+		Cloudlet cl = (Cloudlet) ev.getData();
+		CustomResCloudlet rCl = new CustomResCloudlet(cl); 
+		List<Integer> partnerIdsList  = new ArrayList<Integer>();
+		for( PartnerInfomation partnerInfo : this.getPartnersList()){
+				Log.printLine(CloudSim.clock()+ ": "+ getName()+": #"+ getId() +" Cloudlet #"+ cl.getCloudletId()+ " have been send to broker #"+partnerInfo.getPartnerId());
+				//send to partner
+				send(partnerInfo.getPartnerId(), 0, CloudSimTags.PARTNER_ESTIMATE_REQUEST, cl);
+				partnerIdsList.add(partnerInfo.getPartnerId());
 		}
-		Map<Integer, EstimationCloudletObserve> cloudletList = estimateCloudletMap.get(ev.getSource());
-		Cloudlet cloudlet = (Cloudlet) ev.getData();
+		EstimationCloudletOfPartner esOfPatner = new EstimationCloudletOfPartner(rCl, partnerIdsList);
+		getEstimateCloudletofParnerMap().put(rCl.getCloudletId(), esOfPatner);
+	}		
 		
-		List<Integer> datacenterIDs = new LinkedList<Integer>();
-		for (Integer integer : getDatacenterIdsList()) {
-			datacenterIDs.add(integer);
-		}
-		ResCloudlet resCloudlet = new ResCloudlet(cloudlet);
-		resCloudlet.setFinishTime(Double.MAX_VALUE);
-		
-		Log.printLine(CloudSim.clock() + ": " + getName() + ": Received partner estimate cloudlet #"+resCloudlet.getCloudletId());
-		EstimationCloudletObserve eco = new EstimationCloudletObserve(resCloudlet, datacenterIDs);
-		
-		cloudletList.put(new Integer(cloudlet.getCloudletId()), eco);
-		if(datacenterIDs.size() == 0 ){
-			Log.printLine(getName()+ " has no datacenter, can not estimate");
-		}
-		for (int i: datacenterIDs) {
-			Object[] data = {ev.getSource(), cloudlet};
-			sendNow(i, CloudSimTags.PARTNER_INTERNAL_ESTIMATE_REQUEST, data);
-		}
-		
-//		Object[] timeoutData = {ev.getSource(), cloudlet.getCloudletId()};
-//		send(getId(), 30, CloudSimTags.PARTNER_ESTIMATE_TIMEOUT, timeoutData);
+	
+	/**
+	 * Receive request estimate from partner. send it to add own datacenter to estimate
+	 * s
+	 */
+	@Override
+	public void handlerPartnerCloudletEstimateRequest(SimEvent ev){
+		//TODO
 	}
 	
 	public void addDatacenter(int datacenterId) {
@@ -194,14 +188,6 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 		this.estimationList = estimationList;
 	}
 
-	public Map<Integer, Map<Integer, EstimationCloudletObserve>> getEstimateCloudletMap() {
-		return estimateCloudletMap;
-	}
-
-	public void setEstimateCloudletMap(
-			Map<Integer, Map<Integer, EstimationCloudletObserve>> estimateCloudletMap) {
-		this.estimateCloudletMap = estimateCloudletMap;
-	}
 
 	public List<PartnerInfomation> getPartnersList() {
 		return partnersList;
@@ -209,6 +195,15 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 
 	public void setPartnersList(List<PartnerInfomation> partnersList) {
 		this.partnersList = partnersList;
+	}
+
+	public Map<Integer, EstimationCloudletOfPartner> getEstimateCloudletofParnerMap() {
+		return estimateCloudletofParnerMap;
+	}
+
+	public void setEstimateCloudletofParnerMap(
+			Map<Integer, EstimationCloudletOfPartner> estimateCloudletofParnerMap) {
+		this.estimateCloudletofParnerMap = estimateCloudletofParnerMap;
 	}
 
 }
