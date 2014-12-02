@@ -21,8 +21,9 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 
 	private Map<Integer, Map<Integer, EstimationCloudletObserve>> cloudletEstimateObserveMap;
 	
+	// list cloudlet waiting for internal estimate
 	private List<Cloudlet> estimationList;
-	
+		
 	private int estimationStatus = STOPPED;
 	private List<PartnerInfomation> partnersList = new ArrayList<PartnerInfomation>();
 	protected Map<Integer,EstimationCloudletOfPartner> estimateCloudletofParnerMap;
@@ -156,6 +157,7 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 				} else {
 					// TODO send request to partner
 					Log.printLine(getName() + ": WE NEED HELP FROM PARTNER"); 
+//					sendPartnerRequest(observe.getResCloudlet().getCloudlet());
 				}
 				
 				getEstimationList().remove(0);
