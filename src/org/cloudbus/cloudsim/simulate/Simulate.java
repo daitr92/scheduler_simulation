@@ -102,7 +102,7 @@ public class Simulate {
             		UtilizationModel utilizationModel = new UtilizationModelFull();
             		
             		Cloudlet cloudlet = new Cloudlet(cloudletId_prefix + j, length, pesNumber, fileSize, outputSize, 
-            				utilizationModel, utilizationModel, utilizationModel);
+            				utilizationModel, utilizationModel, utilizationModel, deadline);
             		cloudlet.setUserId(broker.getId());
             		cloudletList.add(cloudlet);
             		
