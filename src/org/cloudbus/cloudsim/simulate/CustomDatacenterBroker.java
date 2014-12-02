@@ -61,9 +61,9 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 	protected void submitCloudlets() {
 		Log.printLine(this.getName() + " submit Cloudlet");
 		for (Cloudlet cloudlet: getCloudletList()) {
-			Log.printLine("Cloudlet #" + cloudlet.getCloudletId() + " has been submitted!");
-			
 			ResCloudlet rcl = new ResCloudlet(cloudlet);
+			
+			Log.printLine("Cloudlet #" + cloudlet.getCloudletId() + " has been submitted!");
 		}
 	}
 	

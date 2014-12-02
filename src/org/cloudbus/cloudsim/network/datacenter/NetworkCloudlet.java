@@ -40,7 +40,8 @@ public class NetworkCloudlet extends Cloudlet implements Comparable<Object> {
 			long memory,
 			UtilizationModel utilizationModelCpu,
 			UtilizationModel utilizationModelRam,
-			UtilizationModel utilizationModelBw) {
+			UtilizationModel utilizationModelBw,
+			double deadlineTime) {
 		super(
 				cloudletId,
 				cloudletLength,
@@ -49,7 +50,8 @@ public class NetworkCloudlet extends Cloudlet implements Comparable<Object> {
 				cloudletOutputSize,
 				utilizationModelCpu,
 				utilizationModelRam,
-				utilizationModelBw);
+				utilizationModelBw,
+				deadlineTime);
 
 		currStagenum = -1;
 		this.memory = memory;
