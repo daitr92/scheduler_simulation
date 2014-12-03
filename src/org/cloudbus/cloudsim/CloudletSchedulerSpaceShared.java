@@ -76,23 +76,12 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 	 */
 	@Override
 	public double updateVmProcessing(double currentTime, List<Double> mipsShare) {
-		setCurrentMipsShare(mipsShare);
-		double timeSpam = currentTime - getPreviousTime(); // time since last update
-		double capacity = 0.0;
-		int cpus = 0;
-
-		for (Double mips : mipsShare) { // count the CPUs available to the VMM
-			capacity += mips;
-			if (mips > 0) {
-				cpus++;
-			}
-		}
-		currentCpus = cpus;
-		capacity /= cpus; // average capacity of each cpu
+		double timeSpam = currentTime - getPreviousTime(); 
+		List<CustomResCloudlet> execList = getCloudletExecList();
 
 		// each machine in the exec list has the same amount of cpu
-		for (ResCloudlet rcl : getCloudletExecList()) {
-			rcl.updateCloudletFinishedSoFar((long) (capacity * timeSpam * rcl.getNumberOfPes() * Consts.MILLION));
+		for (CustomResCloudlet rcl : execList) {
+			rcl.updateCloudletFinishedSoFar((long) (timeSpam * getMips()));
 		}
 
 		// no more cloudlets in this scheduler
@@ -102,43 +91,30 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 		}
 
 		// update each cloudlet
-		int finished = 0;
 		List<ResCloudlet> toRemove = new ArrayList<ResCloudlet>();
 		for (ResCloudlet rcl : getCloudletExecList()) {
 			// finished anyway, rounding issue...
 			if (rcl.getRemainingCloudletLength() == 0) {
 				toRemove.add(rcl);
 				cloudletFinish(rcl);
-				finished++;
 			}
 		}
 		getCloudletExecList().removeAll(toRemove);
 
 		// for each finished cloudlet, add a new one from the waiting list
 		if (!getCloudletWaitingList().isEmpty()) {
-			for (int i = 0; i < finished; i++) {
-				toRemove.clear();
-				for (ResCloudlet rcl : getCloudletWaitingList()) {
-					if ((currentCpus - usedPes) >= rcl.getNumberOfPes()) {
-						rcl.setCloudletStatus(Cloudlet.INEXEC);
-						for (int k = 0; k < rcl.getNumberOfPes(); k++) {
-							rcl.setMachineAndPeId(0, i);
-						}
-						getCloudletExecList().add(rcl);
-						usedPes += rcl.getNumberOfPes();
-						toRemove.add(rcl);
-						break;
-					}
-				}
-				getCloudletWaitingList().removeAll(toRemove);
-			}
+			CustomResCloudlet rcl = (CustomResCloudlet) getCloudletWaitingList().get(0);
+			rcl.setCloudletStatus(Cloudlet.INEXEC);
+			getCloudletExecList().add(rcl);
+			
+			getCloudletWaitingList().remove(0);
 		}
 
 		// estimate finish time of cloudlets in the execution queue
 		double nextEvent = Double.MAX_VALUE;
 		for (ResCloudlet rcl : getCloudletExecList()) {
 			double remainingLength = rcl.getRemainingCloudletLength();
-			double estimatedFinishTime = currentTime + (remainingLength / (capacity * rcl.getNumberOfPes()));
+			double estimatedFinishTime = currentTime + (remainingLength / getMips());
 			if (estimatedFinishTime - currentTime < CloudSim.getMinTimeBetweenEvents()) {
 				estimatedFinishTime = currentTime + CloudSim.getMinTimeBetweenEvents();
 			}
@@ -460,6 +436,23 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 		}
 
 		return -1;
+	}
+	
+	public double moveEstimatedCloudlet() {
+		if (getCloudletExecList().isEmpty()) {
+			double time = getLastEstimated().getBestFinishTime();
+			
+			getLastEstimated().setCloudletStatus(Cloudlet.INEXEC);
+			getCloudletExecList().add(getLastEstimated());
+			setLastEstimated(null);
+			
+			return time;
+		}
+		
+		getLastEstimated().setCloudletStatus(Cloudlet.QUEUED);
+		getCloudletWaitingList().add(getLastEstimated());
+		setLastEstimated(null);
+		return 0.0;
 	}
 
 	/**

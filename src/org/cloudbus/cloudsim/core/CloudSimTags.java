@@ -284,7 +284,9 @@ public class CloudSimTags {
 	
 	public static final int PARTNER_ESTIMATE_RETURN = BASE + 56;
 	
-	public static final int PARTNER_EXEC = BASE + 57;
+	public static final int PARTNER_CANCEL_ESTIMATED_TASK = BASE + 57;
+	
+	public static final int PARTNER_EXEC = BASE + 58;
 
 	/** Private Constructor */
 	private CloudSimTags() {

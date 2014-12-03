@@ -162,6 +162,7 @@ public class CustomDatacenter extends Datacenter {
 				break;
 				
 			case CloudSimTags.DATACENTER_ESTIMATE_TASK:
+				updateCloudletProcessing();
 				estimateTask(ev);
 				break;
 				
@@ -170,6 +171,7 @@ public class CustomDatacenter extends Datacenter {
 				break;
 				
 			case CloudSimTags.DATACENTER_EXEC_TASK:
+				updateCloudletProcessing();
 				processTask(ev);
 				break;
 
@@ -243,7 +245,10 @@ public class CustomDatacenter extends Datacenter {
 		int vmId = (int) ev.getData();
 		for (Vm vm: getVmList()) {
 			if (vm.getId() == vmId) {
-				// TODO add last estimate cloudlet to exec or waiting
+				double time = vm.getCloudletScheduler().moveEstimatedCloudlet();
+				if (time > 0) {
+					send(getId(), time, CloudSimTags.VM_DATACENTER_EVENT);
+				}
 				break;
 			}
 		}

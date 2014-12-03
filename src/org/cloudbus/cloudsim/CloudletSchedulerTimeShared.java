@@ -102,6 +102,10 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
 		setPreviousTime(currentTime);
 		return nextEvent;
 	}
+	
+	public double moveEstimatedCloudlet() {
+		return 0.0;
+	}
 
 	/**
 	 * Gets the capacity.
