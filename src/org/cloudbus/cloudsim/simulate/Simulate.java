@@ -34,7 +34,7 @@ import org.json.simple.parser.JSONParser;
  */
 public class Simulate {
 	
-	private static final String filePath = "/home/ngtrieuvi92/zz/scheduler_simulation/src/org/cloudbus/cloudsim/simulate/testcase.json";
+	private static final String filePath = "C:\\Users\\Kahn\\Downloads\\testcase.json";
 	
 	private static List<DatacenterBroker> brokersList;
 
@@ -118,7 +118,7 @@ public class Simulate {
 			CloudSim.stopSimulation();
 			
 			for (DatacenterBroker broker : brokersList) {
-				List<Cloudlet> newList = broker.getCloudletReceivedList();
+				List<Cloudlet> newList = broker.getCloudletList();
 				printCloudletList(newList);
 			}
 				
