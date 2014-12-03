@@ -14,8 +14,6 @@ import org.cloudbus.cloudsim.core.CloudSimTags;
 import org.cloudbus.cloudsim.core.SimEntity;
 import org.cloudbus.cloudsim.core.SimEvent;
 
-import com.sun.org.apache.bcel.internal.generic.INSTANCEOF;
-
 public class CustomDatacenterBroker extends DatacenterBroker {
 	public static final int STOPPED = 0;
 	public static final int RUNNING = 1;
