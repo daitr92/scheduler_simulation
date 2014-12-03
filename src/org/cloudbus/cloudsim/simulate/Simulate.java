@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.cloudbus.cloudsim.Cloudlet;
+import org.cloudbus.cloudsim.CloudletScheduler;
 import org.cloudbus.cloudsim.CloudletSchedulerSpaceShared;
 import org.cloudbus.cloudsim.DatacenterBroker;
 import org.cloudbus.cloudsim.DatacenterCharacteristics;
@@ -199,10 +200,13 @@ public class Simulate {
 			int pesNumber = ((Long) m_vm.get("pesNumber")).intValue(); // number of cpus
 			String vmm = "Xen"; // VMM name
 			int vmId = vmId_prefix + i;
+			
+			CloudletSchedulerSpaceShared scheduler = new CloudletSchedulerSpaceShared();
+			scheduler.setMips(mips);
 
 			// create VM
 			Vm vm = new Vm(vmId, broker.getId(), mips, pesNumber, ram, bw, size, vmm,
-					new CloudletSchedulerSpaceShared());
+					scheduler);
 			
 			vmList.add(vm);
 

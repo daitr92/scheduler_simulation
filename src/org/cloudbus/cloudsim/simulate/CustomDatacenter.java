@@ -245,7 +245,9 @@ public class CustomDatacenter extends Datacenter {
 		int vmId = (int) ev.getData();
 		for (Vm vm: getVmList()) {
 			if (vm.getId() == vmId) {
-				double time = vm.getCloudletScheduler().moveEstimatedCloudlet();
+				vm.getCloudletScheduler().getLastEstimated().getCloudlet().setResourceParameter(getId(), 
+						getCharacteristics().getCostPerSecond(), getCharacteristics().getCostPerBw());
+				double time = vm.getCloudletScheduler().moveEstimatedCloudlet(vm.getId());
 				if (time > 0) {
 					send(getId(), time, CloudSimTags.VM_DATACENTER_EVENT);
 				}

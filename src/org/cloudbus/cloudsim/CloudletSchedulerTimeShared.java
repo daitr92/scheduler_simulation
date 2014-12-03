@@ -103,7 +103,7 @@ public class CloudletSchedulerTimeShared extends CloudletScheduler {
 		return nextEvent;
 	}
 	
-	public double moveEstimatedCloudlet() {
+	public double moveEstimatedCloudlet(int vmId) {
 		return 0.0;
 	}
 

@@ -14,5 +14,5 @@ public final class Consts {
      */
     private Consts(){}
     
-    public static int MILLION = 1000000;
+    public static int MILLION = 1;
 }
