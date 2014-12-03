@@ -7,6 +7,7 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.math3.genetics.TournamentSelection;
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.CloudletSchedulerSpaceShared;
 import org.cloudbus.cloudsim.DatacenterBroker;
@@ -122,6 +123,13 @@ public class Simulate {
 			for (DatacenterBroker broker : brokersList) {
 				List<Cloudlet> newList = broker.getCloudletList();
 				printCloudletList(newList);
+			}
+			
+			for (DatacenterBroker broker : brokersList) {
+				CustomDatacenterBroker cusBroker = (CustomDatacenterBroker) broker;
+				List<Cloudlet> newList = broker.getCloudletList();
+				List<PartnerInfomation> partnerInfo = cusBroker.getPartnersList();
+				printResult(newList, partnerInfo);
 			}
 				
 			Log.printLine("CloudSimExample1 finished!");
@@ -277,5 +285,33 @@ public class Simulate {
 							+ dft.format(cloudlet.getFinishTime()));
 				} 
 		}
+	}
+	
+	private static void printResult(List<Cloudlet> list, List<PartnerInfomation> partnerInfo) {
+		int totalCloudlet = list.size();
+		int totalPartner = partnerInfo.size();
+		int successCloudlet = 0;
+		double totalKRatio = 0;
+		Cloudlet cloudlet;
+		String indent = "    ";
+		Log.printLine();
+		Log.printLine("========== RESULT ==========");
+
+		DecimalFormat dft = new DecimalFormat("###.##");
+		
+		for (int i = 0; i < totalCloudlet; i++) {
+			cloudlet = list.get(i);
+			if (cloudlet.getCloudletStatus() == Cloudlet.SUCCESS) {
+				successCloudlet++;
+			}
+		}
+		
+		for (int i = 0; i < totalPartner; i++) {
+			PartnerInfomation pInfo = partnerInfo.get(i);
+			totalKRatio += pInfo.getKRatio();
+		}
+		
+		Log.printLine(totalCloudlet + indent + successCloudlet + indent + dft.format(successCloudlet / totalCloudlet * 100) + "%"
+				+ indent + dft.format(totalKRatio / totalPartner * 100) + "%");
 	}
 }
