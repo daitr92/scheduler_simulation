@@ -217,6 +217,8 @@ public abstract class CloudletScheduler {
 	 * @return the current requested bw
 	 */
 	public abstract double getCurrentRequestedUtilizationOfBw();
+	
+	public abstract double moveEstimatedCloudlet();
 
 	/**
 	 * Gets the previous time.

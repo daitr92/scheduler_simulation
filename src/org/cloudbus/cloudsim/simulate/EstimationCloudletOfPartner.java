@@ -5,41 +5,39 @@ import java.util.List;
 public class EstimationCloudletOfPartner {
 	
 	private CustomResCloudlet resCloudlet;
-	private List<Integer> partnerIdsList;
-	private List<PartnerInfomation> partnerInfosList;
-	private PartnerInfomation currentBestPartner;
+	private List<PartnerInfomation> partnerIdsList;
+	private int currentBestPartnerId;
 	
 	public EstimationCloudletOfPartner(CustomResCloudlet resCloudlet,
-			List<Integer> partnerIdsList, List<PartnerInfomation> partnerInfosList) {
+			List<PartnerInfomation> partnerIdsList) {
 		super();
 		this.resCloudlet = resCloudlet;
 		this.partnerIdsList = partnerIdsList;
-		this.setCurrentBestPartner(new PartnerInfomation(-1,-1,0,0,0,1));
-		this.partnerInfosList = partnerInfosList;
+		this.currentBestPartnerId = -1;
 	}
 	
-	public void receiveEstimateResult(int partnerId, CustomResCloudlet reResCloudlet) {
+	public int receiveEstimateResult(int partnerId, CustomResCloudlet reResCloudlet) {
+		int partner_cancel_waiting_exec = partnerId; 
+		
 		int totalPartnerId = partnerIdsList.size();
 		for (int i = 0; i < totalPartnerId; i++) {
-			if (partnerIdsList.get(i) == partnerId) {
+			if (partnerIdsList.get(i).getPartnerId() == partnerId) {
 				partnerIdsList.remove(i);
 				break;
 			}
 		}
-		double finishTime = reResCloudlet.getClouddletFinishTime();
-		double bestFinishTime = resCloudlet.getClouddletFinishTime();
-		if ((bestFinishTime == -1 ||(finishTime > 0 && finishTime < bestFinishTime))){
-			if(finishTime < reResCloudlet.getCloudlet().getDeadlineTime()){
-				double k = calcPartnerKRatio(partnerId,reResCloudlet);
-				if((getCurrentBestPartner().getPartnerId()  == -1) || getCurrentBestPartner().getkRatio() >k){
-					getCurrentBestPartner().setPartnerId(partnerId);
-					getCurrentBestPartner().setkRatio(k);
-					getCurrentBestPartner().setRequested(reResCloudlet.getCloudlet().getCloudletLength());;
-				}
-				resCloudlet.setFinishTime(finishTime);
-				resCloudlet.getCloudlet().setVmId(reResCloudlet.getCloudlet().getVmId());
-			}
+		
+		double bestFinishTime = reResCloudlet.getBestFinishTime();
+		
+		if (bestFinishTime < resCloudlet.getCloudlet().getDeadlineTime() && bestFinishTime < resCloudlet.getBestFinishTime()) {
+			resCloudlet.setBestFinishTime(bestFinishTime);
+			resCloudlet.setBestDatacenterId(reResCloudlet.getBestDatacenterId());
+			resCloudlet.setBestVmId(reResCloudlet.getBestVmId());
+			partner_cancel_waiting_exec = currentBestPartnerId;
+			currentBestPartnerId = partnerId;
 		}
+
+		return partner_cancel_waiting_exec;
 	}
 	
 	public CustomResCloudlet getResCloudlet() {
@@ -50,43 +48,24 @@ public class EstimationCloudletOfPartner {
 		this.resCloudlet = resCloudlet;
 	}
 
-	
-	public boolean isFinished() {
-		if(partnerIdsList.size() == 0){
-			for(PartnerInfomation pInfo :partnerInfosList){
-				if(pInfo.getPartnerId() == getCurrentBestPartner().getPartnerId()){
-					pInfo.updateLenghtRatio(getCurrentBestPartner().getRequested(), 0);
-					pInfo.setRequested(getCurrentBestPartner().getRequested()+pInfo.getRequested());
-				}
-			}
-		}
-		return partnerIdsList.size() == 0;
-	}
-	
-	public double calcPartnerKRatio(int partnerID,CustomResCloudlet resCloudlet) {
-		double kRatio  = 1;
-		for(PartnerInfomation pInfo :partnerInfosList){
-			if(pInfo.getPartnerId() == partnerID){
-				kRatio = pInfo.getKRatioWithCurrentTask(resCloudlet.getCloudlet().getCloudletLength(), 0);
-			}
-		}
-		return kRatio;
-	}
-
-	public List<PartnerInfomation> getPartnerInfosList() {
-		return partnerInfosList;
-	}
-
-	public void setPartnerInfosList(List<PartnerInfomation> partnerInfosList) {
-		this.partnerInfosList = partnerInfosList;
-	}
-	
-	public List<Integer> getPartnerIdsList() {
+	public List<PartnerInfomation> getPartnerIdsList() {
 		return partnerIdsList;
 	}
 
-	public void setPartnerIdsList(List<Integer> partnerIdsList) {
+	public void setPartnerIdsList(List<PartnerInfomation> partnerIdsList) {
 		this.partnerIdsList = partnerIdsList;
+	}
+	
+	public boolean isFinished() {
+		return partnerIdsList.size() == 0;
+	}
+	
+	public boolean isExecable() {
+		return resCloudlet.getBestFinishTime() <= resCloudlet.getCloudlet().getDeadlineTime();
+	}
+
+	public int getCurrentBestPartnerId() {
+		return currentBestPartnerId;
 	}
 
 	/**
@@ -99,10 +78,7 @@ public class EstimationCloudletOfPartner {
 	/**
 	 * @param currentBestPartner the currentBestPartner to set
 	 */
-	public void setCurrentBestPartner(PartnerInfomation currentBestPartner) {
-		this.currentBestPartner = currentBestPartner;
+	public void setCurrentBestPartnerId(int currentBestPartnerId) {
+		this.currentBestPartnerId = currentBestPartnerId;
 	}
-	
-	
-	
 }

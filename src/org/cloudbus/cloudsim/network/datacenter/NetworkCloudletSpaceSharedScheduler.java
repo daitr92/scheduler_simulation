@@ -75,6 +75,10 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 		pkttosend = new HashMap<Integer, List<HostPacket>>();
 		pktrecv = new HashMap<Integer, List<HostPacket>>();
 	}
+	
+	public double moveEstimatedCloudlet() {
+		return 0.0;
+	}
 
 	/**
 	 * Updates the processing of cloudlets running under management of this scheduler.
