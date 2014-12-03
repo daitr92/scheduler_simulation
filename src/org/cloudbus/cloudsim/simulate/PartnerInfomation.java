@@ -48,9 +48,9 @@ public class PartnerInfomation {
 		super();
 		this.partnerId = partnerId;
 		this.ratio = ratio;
-		this.requested = 0;
-		this.satified = 0;
-		this.lenghtRatio = 0;
+		this.requested = 100000;
+		this.satified = 100000;
+		this.lenghtRatio = 1;
 		this.kRatio = 1;
 	}
 
@@ -112,9 +112,9 @@ public class PartnerInfomation {
 	public double getKRatio() {
 		double k;
 		if(this.getRatio() == 0 ){
-			k = 0;
+			k = 1;
 		} else {
-			k = Math.abs(getLenghtRatio()/getRatio());
+			k = Math.abs(getLenghtRatio()/getRatio()-1);
 		}
 		return k;
 	}
@@ -122,9 +122,9 @@ public class PartnerInfomation {
 	public double getKRatioWithCurrentTask(double request_lenght,double satify_lenght) {
 		double k;
 		if(this.getRatio() == 0 ){
-			k = 0;
+			k = 1;
 		} else {
-			k = Math.abs((getLenghtRatio()+calcLenghtRatio(request_lenght, satify_lenght))/getRatio());
+			k = Math.abs((getLenghtRatio()+calcLenghtRatio(request_lenght, satify_lenght))/getRatio()-1);
 		}
 		return k;
 	}
@@ -186,8 +186,9 @@ public class PartnerInfomation {
 	/**
 	 * @param kRatio the kRatio to set
 	 */
-	public void setkRatio(double kRatio) {
+	public double setkRatio(double kRatio) {
 		this.kRatio = kRatio;
+		return this.kRatio;
 	}
 
 }

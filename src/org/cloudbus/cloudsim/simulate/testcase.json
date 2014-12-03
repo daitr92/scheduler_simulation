@@ -114,7 +114,7 @@
 			}
 		},
 		"cloudlets": {
-			"quantity": 1,
+			"quantity": 2,
 			"long": 40000,
 			"fileSize": 300,
 			"outputSize": 300,

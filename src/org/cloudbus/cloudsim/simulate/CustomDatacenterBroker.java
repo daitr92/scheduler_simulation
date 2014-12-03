@@ -299,7 +299,7 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 					Log.printLine(getName() + ": Send Cloudlet #" + resCloudlet.getCloudletId() 
 							+ " to Partner #" + partnerCloudletEstimateList.getCurrentBestPartnerId() + " to EXEC");
 					PartnerInfomation best  = partnerCloudletEstimateList.getCurrentBestPartner();
-					Log.printLine("K ratio:"+best.getKRatio());
+					Log.printLine("K ratio:"+best.getkRatio());
 					updatePartnerInformation(partnerCloudletEstimateList.getCurrentBestPartner());
 					sendNow(partnerCloudletEstimateList.getCurrentBestPartnerId(), CloudSimTags.PARTNER_EXEC, resCloudlet);
 				} else {

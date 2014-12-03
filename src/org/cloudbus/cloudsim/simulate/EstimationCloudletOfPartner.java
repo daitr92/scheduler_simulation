@@ -2,6 +2,9 @@ package org.cloudbus.cloudsim.simulate;
 
 import java.util.List;
 
+import org.apache.commons.math3.analysis.function.Max;
+import org.cloudbus.cloudsim.Log;
+
 public class EstimationCloudletOfPartner {
 	
 	private CustomResCloudlet resCloudlet;
@@ -18,6 +21,7 @@ public class EstimationCloudletOfPartner {
 		this.setGlobalpartnerLists(globalpartnerLists);
 		this.currentBestPartnerId = -1;
 		this.currentBestPartner = new PartnerInfomation(-1);
+		this.currentBestPartner.setkRatio(-1);
 	}
 	
 	/**
@@ -44,13 +48,12 @@ public class EstimationCloudletOfPartner {
 		double bestFinishTime = reResCloudlet.getBestFinishTime();
 		
 		if (bestFinishTime < resCloudlet.getCloudlet().getDeadlineTime()){
-						
 			double k = calcPartnerKRatio(partnerId,reResCloudlet);
-			if((getCurrentBestPartner().getPartnerId()  == -1) || getCurrentBestPartner().getkRatio() > k){
-				getCurrentBestPartner().setPartnerId(partnerId);
+			if((getCurrentBestPartner().getPartnerId()  == -1) || getCurrentBestPartner().getkRatio() > k || getCurrentBestPartner().getkRatio()  == -1){
+				currentBestPartner.setPartnerId(partnerId);
 				getCurrentBestPartner().setkRatio(k);
-				getCurrentBestPartner().setRequested(reResCloudlet.getCloudlet().getCloudletLength());
-				
+				currentBestPartner.setRequested(reResCloudlet.getCloudlet().getCloudletLength());
+//				Log.printLine(getCurrentBestPartner().getkRatio());
 				partner_cancel_waiting_exec[0] = currentBestPartnerId;
 				partner_cancel_waiting_exec[1] = resCloudlet.getBestDatacenterId();
 				partner_cancel_waiting_exec[2] = resCloudlet.getBestVmId();
@@ -59,6 +62,7 @@ public class EstimationCloudletOfPartner {
 				resCloudlet.setBestDatacenterId(reResCloudlet.getBestDatacenterId());
 				resCloudlet.setBestVmId(reResCloudlet.getBestVmId());
 				currentBestPartnerId = partnerId;
+				
 			}
 		}
 
@@ -132,7 +136,7 @@ public class EstimationCloudletOfPartner {
 	
 	public boolean isExecable() {
 		boolean is_ontime = resCloudlet.getBestFinishTime() <= resCloudlet.getCloudlet().getDeadlineTime();
-		boolean is_satify_ratio  = getCurrentBestPartner().getkRatio() <= 1;
+		boolean is_satify_ratio  = getCurrentBestPartner().getkRatio() > 0;
 		return (is_ontime && is_satify_ratio);
 	}
 
