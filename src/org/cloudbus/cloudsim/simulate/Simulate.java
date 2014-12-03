@@ -116,7 +116,7 @@ public class Simulate {
             
 			CloudSim.startSimulation();
 			CloudSim.stopSimulation();
-			
+
 			for (DatacenterBroker broker : brokersList) {
 				List<Cloudlet> newList = broker.getCloudletList();
 				printCloudletList(newList);
