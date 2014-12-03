@@ -89,7 +89,8 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 			setPreviousTime(currentTime);
 			return 0.0;
 		}
-
+		
+		int finished = 0;
 		// update each cloudlet
 		List<ResCloudlet> toRemove = new ArrayList<ResCloudlet>();
 		for (ResCloudlet rcl : getCloudletExecList()) {
@@ -97,17 +98,22 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 			if (rcl.getRemainingCloudletLength() == 0) {
 				toRemove.add(rcl);
 				cloudletFinish(rcl);
+				finished++;
 			}
 		}
 		getCloudletExecList().removeAll(toRemove);
 
 		// for each finished cloudlet, add a new one from the waiting list
-		if (!getCloudletWaitingList().isEmpty()) {
-			CustomResCloudlet rcl = (CustomResCloudlet) getCloudletWaitingList().get(0);
-			rcl.setCloudletStatus(Cloudlet.INEXEC);
-			getCloudletExecList().add(rcl);
-			
-			getCloudletWaitingList().remove(0);
+		for (int i = 0; i < finished; i++) {
+			if (!getCloudletWaitingList().isEmpty()) {
+				CustomResCloudlet rcl = (CustomResCloudlet) getCloudletWaitingList().get(0);
+				rcl.setCloudletStatus(Cloudlet.INEXEC);
+				getCloudletExecList().add(rcl);
+				
+				getCloudletWaitingList().remove(0);
+			} else {
+				break;
+			}
 		}
 
 		// estimate finish time of cloudlets in the execution queue
@@ -380,9 +386,6 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 	
 	@Override
 	public double cloudletEstimate(Cloudlet gl, double fileTransferTime, double mips) {
-//		Log.printLine(" DEBUG: estimating cloudlet #"+gl.getCloudletId());
-//		Log.printLine("debug wating list size "+getCloudletWaitingList().size());
-//		Log.printLine("debug exec list size "+getCloudletExecList().size());
 		double extraSize = mips * fileTransferTime;
 		long length = gl.getCloudletLength();
 		length += extraSize;
@@ -395,10 +398,9 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 		} else if (!getCloudletExecList().isEmpty()) {
 			List<CustomResCloudlet> execList = getCloudletExecList();
 			CustomResCloudlet last_rcl = execList.get(execList.size() - 1);
-			double result = last_rcl.getBestFinishTime() + exec_time;
-			return result;
+			return last_rcl.getBestFinishTime() + exec_time;
 		} else {
-			return exec_time;
+			return exec_time + CloudSim.clock();
 		}
 	}
 
@@ -444,7 +446,6 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 	
 	public double moveEstimatedCloudlet(int vmId) {
 		Cloudlet cl = getLastEstimated().getCloudlet();
-		Log.printLine(" DEBUG: move Estimated Cloudlet to exec or waiting list cloudlet #"+cl.getCloudletId());
 		CustomResCloudlet est = getLastEstimated();
 		CustomResCloudlet rcl = new CustomResCloudlet(cl);
 		rcl.setMachineAndPeId(vmId, 0);
@@ -668,7 +669,6 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 	 */
 	@Override
 	public double getTotalCurrentAllocatedMipsForCloudlet(ResCloudlet rcl, double time) {
-		// TODO Auto-generated method stub
 		return 0.0;
 	}
 
@@ -680,19 +680,16 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 	 */
 	@Override
 	public double getTotalCurrentRequestedMipsForCloudlet(ResCloudlet rcl, double time) {
-		// TODO Auto-generated method stub
 		return 0.0;
 	}
 
 	@Override
 	public double getCurrentRequestedUtilizationOfRam() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public double getCurrentRequestedUtilizationOfBw() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

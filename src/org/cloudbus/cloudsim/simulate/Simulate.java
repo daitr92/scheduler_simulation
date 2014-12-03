@@ -8,7 +8,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.cloudbus.cloudsim.Cloudlet;
-import org.cloudbus.cloudsim.CloudletScheduler;
 import org.cloudbus.cloudsim.CloudletSchedulerSpaceShared;
 import org.cloudbus.cloudsim.DatacenterBroker;
 import org.cloudbus.cloudsim.DatacenterCharacteristics;
@@ -107,8 +106,8 @@ public class Simulate {
             		cloudlet.setUserId(broker.getId());
             		cloudletList.add(cloudlet);
             		
-            		Log.printLine("Cloudlet #" + cloudlet.getCloudletId() 
-            				+ " has been created and is belonged to Broker #" + cloudlet.getUserId());
+//            		Log.printLine("Cloudlet #" + cloudlet.getCloudletId() 
+//            				+ " has been created and is belonged to Broker #" + cloudlet.getUserId());
             	}
 
             	broker.submitCloudletList(cloudletList);
@@ -180,8 +179,8 @@ public class Simulate {
 				
 				broker.addDatacenter(datacenter.getId());
 				
-				Log.printLine("Datacenter #" + datacenter.getId() 
-						+ " has been created and is belonged to Broker #" + datacenter.getDatacenterBrokerId());
+//				Log.printLine("Datacenter #" + datacenter.getId() 
+//						+ " has been created and is belonged to Broker #" + datacenter.getDatacenterBrokerId());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -263,7 +262,18 @@ public class Simulate {
 						+ indent + dft.format(cloudlet.getExecStartTime())
 						+ indent + indent
 						+ dft.format(cloudlet.getFinishTime()));
-			}
+			} else 
+				if (cloudlet.getCloudletStatus() == Cloudlet.FAILED) {
+					Log.print("FAILED");
+
+					Log.printLine(indent + indent + cloudlet.getResourceId()
+							+ indent + indent + indent + cloudlet.getVmId()
+							+ indent + indent
+							+ dft.format(cloudlet.getActualCPUTime()) + indent
+							+ indent + dft.format(cloudlet.getExecStartTime())
+							+ indent + indent
+							+ dft.format(cloudlet.getFinishTime()));
+				} 
 		}
 	}
 }
