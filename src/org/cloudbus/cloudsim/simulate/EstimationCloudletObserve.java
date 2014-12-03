@@ -2,6 +2,8 @@ package org.cloudbus.cloudsim.simulate;
 
 import java.util.List;
 
+import org.cloudbus.cloudsim.Log;
+
 public class EstimationCloudletObserve {
 	private List<Integer> datacenterList;
 	private CustomResCloudlet resCloudlet;
@@ -54,6 +56,9 @@ public class EstimationCloudletObserve {
 	}
 	
 	public boolean isExecable() {
+		Log.printLine("DEBUG");
+		Log.printLine(resCloudlet.getBestFinishTime());
+		Log.printLine(resCloudlet.getCloudlet().getDeadlineTime());
 		return resCloudlet.getBestFinishTime() <= resCloudlet.getCloudlet().getDeadlineTime();
 	}
 

@@ -7,6 +7,7 @@ import org.cloudbus.cloudsim.CloudletScheduler;
 import org.cloudbus.cloudsim.Datacenter;
 import org.cloudbus.cloudsim.DatacenterCharacteristics;
 import org.cloudbus.cloudsim.Host;
+import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Storage;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.VmAllocationPolicy;
@@ -190,7 +191,6 @@ public class CustomDatacenter extends Datacenter {
 		
 		double bestFinishTime = Double.MAX_VALUE;
 		Vm bestVm = null;
-		
 		for (Vm vm: getVmList()) {
 			CloudletScheduler scheduler = vm.getCloudletScheduler();
 			double mips = vm.getMips();

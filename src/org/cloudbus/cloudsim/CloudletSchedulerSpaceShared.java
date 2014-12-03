@@ -380,6 +380,9 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 	
 	@Override
 	public double cloudletEstimate(Cloudlet gl, double fileTransferTime, double mips) {
+//		Log.printLine(" DEBUG: estimating cloudlet #"+gl.getCloudletId());
+//		Log.printLine("debug wating list size "+getCloudletWaitingList().size());
+//		Log.printLine("debug exec list size "+getCloudletExecList().size());
 		double extraSize = mips * fileTransferTime;
 		long length = gl.getCloudletLength();
 		length += extraSize;
@@ -388,11 +391,12 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 		if (!getCloudletWaitingList().isEmpty()) {
 			List<CustomResCloudlet> waitingList = getCloudletWaitingList();
 			CustomResCloudlet last_rcl = waitingList.get(waitingList.size() - 1);
-			return last_rcl.getClouddletFinishTime() + exec_time;
+			return last_rcl.getBestFinishTime() + exec_time;
 		} else if (!getCloudletExecList().isEmpty()) {
 			List<CustomResCloudlet> execList = getCloudletExecList();
 			CustomResCloudlet last_rcl = execList.get(execList.size() - 1);
-			return last_rcl.getClouddletFinishTime() + exec_time;
+			double result = last_rcl.getBestFinishTime() + exec_time;
+			return result;
 		} else {
 			return exec_time;
 		}
@@ -440,6 +444,7 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 	
 	public double moveEstimatedCloudlet(int vmId) {
 		Cloudlet cl = getLastEstimated().getCloudlet();
+		Log.printLine(" DEBUG: move Estimated Cloudlet to exec or waiting list cloudlet #"+cl.getCloudletId());
 		CustomResCloudlet est = getLastEstimated();
 		CustomResCloudlet rcl = new CustomResCloudlet(cl);
 		rcl.setMachineAndPeId(vmId, 0);
@@ -448,8 +453,9 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 		rcl.setBestVmId(est.getBestVmId());
 		
 		if (getCloudletExecList().isEmpty()) {
-			double time = getLastEstimated().getBestFinishTime();
 			
+			double time = getLastEstimated().getBestFinishTime();
+
 			est.setCloudletStatus(Cloudlet.INEXEC);
 			
 			getCloudletExecList().add(rcl);

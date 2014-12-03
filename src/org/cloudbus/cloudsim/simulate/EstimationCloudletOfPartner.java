@@ -71,9 +71,9 @@ public class EstimationCloudletOfPartner {
 	/**
 	 * @return the currentBestPartner
 	 */
-	public PartnerInfomation getCurrentBestPartner() {
-		return currentBestPartner;
-	}
+//	public PartnerInfomation getCurrentBestPartner() {
+//		return currentBestPartner;
+//	}
 
 	/**
 	 * @param currentBestPartner the currentBestPartner to set
