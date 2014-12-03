@@ -76,7 +76,7 @@ public class NetworkCloudletSpaceSharedScheduler extends CloudletScheduler {
 		pktrecv = new HashMap<Integer, List<HostPacket>>();
 	}
 	
-	public double moveEstimatedCloudlet() {
+	public double moveEstimatedCloudlet(int vmId) {
 		return 0.0;
 	}
 

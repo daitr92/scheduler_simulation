@@ -78,6 +78,14 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 			case CloudSimTags.PARTNER_ESTIMATE_RETURN: 
 				processReturnEstimateFromPartner(ev);
 				break;
+				
+			case CloudSimTags.PARTNER_EXEC:
+				processPartnerCloudletExecRequest(ev);
+				break;
+				
+			case CloudSimTags.PARTNER_CANCEL_ESTIMATED_TASK:
+				
+				break;
 
 			// other unknown tags are processed by this method
 			default:
@@ -171,6 +179,10 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 				sendNow(getId(), CloudSimTags.BROKER_ESTIMATE_NEXT_TASK);
 			}
 		}
+	}
+	
+	private void processPartnerCloudletExecRequest(SimEvent ev) {
+		CustomResCloudlet rcl = (CustomResCloudlet) ev.getData();
 	}
 	
 

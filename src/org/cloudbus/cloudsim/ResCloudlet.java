@@ -547,5 +547,4 @@ public class ResCloudlet {
 	public String getUid() {
 		return getUserId() + "-" + getCloudletId();
 	}
-
 }

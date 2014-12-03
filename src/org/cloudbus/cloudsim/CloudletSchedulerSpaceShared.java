@@ -438,19 +438,28 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 		return -1;
 	}
 	
-	public double moveEstimatedCloudlet() {
+	public double moveEstimatedCloudlet(int vmId) {
+		Cloudlet cl = getLastEstimated().getCloudlet();
+		CustomResCloudlet est = getLastEstimated();
+		CustomResCloudlet rcl = new CustomResCloudlet(cl);
+		rcl.setMachineAndPeId(vmId, 0);
+		rcl.setBestFinishTime(est.getBestFinishTime());
+		rcl.setBestDatacenterId(est.getBestDatacenterId());
+		rcl.setBestVmId(est.getBestVmId());
+		
 		if (getCloudletExecList().isEmpty()) {
 			double time = getLastEstimated().getBestFinishTime();
 			
-			getLastEstimated().setCloudletStatus(Cloudlet.INEXEC);
-			getCloudletExecList().add(getLastEstimated());
+			est.setCloudletStatus(Cloudlet.INEXEC);
+			
+			getCloudletExecList().add(rcl);
 			setLastEstimated(null);
 			
 			return time;
 		}
 		
-		getLastEstimated().setCloudletStatus(Cloudlet.QUEUED);
-		getCloudletWaitingList().add(getLastEstimated());
+		est.setCloudletStatus(Cloudlet.QUEUED);
+		getCloudletWaitingList().add(rcl);
 		setLastEstimated(null);
 		return 0.0;
 	}
