@@ -89,7 +89,8 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 			setPreviousTime(currentTime);
 			return 0.0;
 		}
-
+		
+		int finished = 0;
 		// update each cloudlet
 		List<ResCloudlet> toRemove = new ArrayList<ResCloudlet>();
 		for (ResCloudlet rcl : getCloudletExecList()) {
@@ -97,17 +98,22 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 			if (rcl.getRemainingCloudletLength() == 0) {
 				toRemove.add(rcl);
 				cloudletFinish(rcl);
+				finished++;
 			}
 		}
 		getCloudletExecList().removeAll(toRemove);
 
 		// for each finished cloudlet, add a new one from the waiting list
-		if (!getCloudletWaitingList().isEmpty()) {
-			CustomResCloudlet rcl = (CustomResCloudlet) getCloudletWaitingList().get(0);
-			rcl.setCloudletStatus(Cloudlet.INEXEC);
-			getCloudletExecList().add(rcl);
-			
-			getCloudletWaitingList().remove(0);
+		for (int i = 0; i < finished; i++) {
+			if (!getCloudletWaitingList().isEmpty()) {
+				CustomResCloudlet rcl = (CustomResCloudlet) getCloudletWaitingList().get(0);
+				rcl.setCloudletStatus(Cloudlet.INEXEC);
+				getCloudletExecList().add(rcl);
+				
+				getCloudletWaitingList().remove(0);
+			} else {
+				break;
+			}
 		}
 
 		// estimate finish time of cloudlets in the execution queue
@@ -388,13 +394,13 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 		if (!getCloudletWaitingList().isEmpty()) {
 			List<CustomResCloudlet> waitingList = getCloudletWaitingList();
 			CustomResCloudlet last_rcl = waitingList.get(waitingList.size() - 1);
-			return last_rcl.getClouddletFinishTime() + exec_time;
+			return last_rcl.getBestFinishTime() + exec_time;
 		} else if (!getCloudletExecList().isEmpty()) {
 			List<CustomResCloudlet> execList = getCloudletExecList();
 			CustomResCloudlet last_rcl = execList.get(execList.size() - 1);
-			return last_rcl.getClouddletFinishTime() + exec_time;
+			return last_rcl.getBestFinishTime() + exec_time;
 		} else {
-			return exec_time;
+			return exec_time + CloudSim.clock();
 		}
 	}
 
@@ -662,7 +668,6 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 	 */
 	@Override
 	public double getTotalCurrentAllocatedMipsForCloudlet(ResCloudlet rcl, double time) {
-		// TODO Auto-generated method stub
 		return 0.0;
 	}
 
@@ -674,19 +679,16 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 	 */
 	@Override
 	public double getTotalCurrentRequestedMipsForCloudlet(ResCloudlet rcl, double time) {
-		// TODO Auto-generated method stub
 		return 0.0;
 	}
 
 	@Override
 	public double getCurrentRequestedUtilizationOfRam() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public double getCurrentRequestedUtilizationOfBw() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

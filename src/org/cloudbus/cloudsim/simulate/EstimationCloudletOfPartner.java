@@ -16,8 +16,11 @@ public class EstimationCloudletOfPartner {
 		this.currentBestPartnerId = -1;
 	}
 	
-	public int receiveEstimateResult(int partnerId, CustomResCloudlet reResCloudlet) {
-		int partner_cancel_waiting_exec = partnerId; 
+	public int[] receiveEstimateResult(int partnerId, CustomResCloudlet reResCloudlet) {
+		int[] partner_cancel_waiting_exec = new int[3];
+		partner_cancel_waiting_exec[0] = partnerId;
+		partner_cancel_waiting_exec[1] = reResCloudlet.getBestDatacenterId();
+		partner_cancel_waiting_exec[2] = reResCloudlet.getBestVmId();
 		
 		int totalPartnerId = partnerIdsList.size();
 		for (int i = 0; i < totalPartnerId; i++) {
@@ -30,10 +33,14 @@ public class EstimationCloudletOfPartner {
 		double bestFinishTime = reResCloudlet.getBestFinishTime();
 		
 		if (bestFinishTime < resCloudlet.getCloudlet().getDeadlineTime() && bestFinishTime < resCloudlet.getBestFinishTime()) {
+			partner_cancel_waiting_exec[0] = currentBestPartnerId;
+			partner_cancel_waiting_exec[1] = resCloudlet.getBestDatacenterId();
+			partner_cancel_waiting_exec[2] = resCloudlet.getBestVmId();
+			
 			resCloudlet.setBestFinishTime(bestFinishTime);
 			resCloudlet.setBestDatacenterId(reResCloudlet.getBestDatacenterId());
 			resCloudlet.setBestVmId(reResCloudlet.getBestVmId());
-			partner_cancel_waiting_exec = currentBestPartnerId;
+
 			currentBestPartnerId = partnerId;
 		}
 
