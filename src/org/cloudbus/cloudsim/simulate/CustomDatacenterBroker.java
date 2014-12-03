@@ -86,7 +86,7 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 				break;
 				
 			case CloudSimTags.PARTNER_CANCEL_ESTIMATED_TASK:
-				
+				processPartnerCloudletCancelRequest(ev);
 				break;
 
 			// other unknown tags are processed by this method
@@ -285,12 +285,8 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 	 */
 	@Override
 	protected void processReturnEstimateFromPartner(SimEvent ev) {
-		Log.printLine(CloudSim.clock() + ": " + getName() + ": Received estimate result from Broker #" + ev.getSource());
-		
 		CustomResCloudlet rcl =(CustomResCloudlet) ev.getData();
-
 		Log.printLine(CloudSim.clock() + ": " + getName() + ": Received estimate result from Broker #" + ev.getSource() +"Cloudlet #"+rcl.getCloudletId()+":"+rcl.getBestFinishTime());
-		
 		if (getEstimateCloudletofParnerMap().containsKey(rcl.getCloudletId())) {
 			EstimationCloudletOfPartner partnerCloudletEstimateList = getEstimateCloudletofParnerMap().get(rcl.getCloudletId());
 		
@@ -314,6 +310,10 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 					sendNow(getId(), CloudSimTags.CLOUDLET_RETURN, resCloudlet.getCloudlet());
 				}
 			}
+		} 
+		else
+		{
+			Log.printLine("Error in processReturnEstimateFromPartner, clouled return not exist in list");
 		}
 	}
 	
