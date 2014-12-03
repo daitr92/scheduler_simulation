@@ -80,6 +80,20 @@ public class PartnerInfomation {
 		return deviation;
 	}
 	
+	public double updateRequested(double request_lenght){
+		setRequested(getRequested()+request_lenght);
+		return getRequested()+request_lenght;
+	}
+	
+	public double updateSatified(double satify_lenght){
+		setSatified(getSatified()+satify_lenght);
+		return getSatified()+satify_lenght;
+	}
+	public double updateKRatio(){
+		setkRatio(getKRatio());
+		return getKRatio();
+	}
+	
 	public double calcLenghtRatio(double request_lenght,double satify_lenght){
 		double deviation;
 		if(this.getSatified() != 0 ){

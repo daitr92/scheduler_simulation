@@ -186,6 +186,7 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 	
 	private void processPartnerCloudletExecRequest(SimEvent ev) {
 		CustomResCloudlet rcl = (CustomResCloudlet) ev.getData();
+		updatePartnerInformationByValue(ev.getSource(),0,rcl.getCloudletLength());
 		sendExecRequest(rcl.getBestDatacenterId(), rcl.getBestVmId(), rcl);
 		sendNow(getId(), CloudSimTags.BROKER_ESTIMATE_NEXT_TASK);
 	}
@@ -325,6 +326,20 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 				pInfo.updateLenghtRatio(currentBestPartner.getRequested(), 0);
 				pInfo.setRequested(currentBestPartner.getRequested()+pInfo.getRequested());
 				pInfo.setkRatio(currentBestPartner.getKRatio());
+				Log.printLine("updated partner info");
+				Log.printLine(pInfo.toString());
+			}
+		}
+		
+	}
+	
+	private void updatePartnerInformationByValue(int partnerId, double request,double satify) {
+		for(PartnerInfomation pInfo :partnersList){
+			if(pInfo.getPartnerId() == partnerId){
+				pInfo.updateRequested(request);
+				pInfo.updateSatified(satify);
+				pInfo.updateLenghtRatio(0, 0);
+				pInfo.updateKRatio();
 				Log.printLine("updated partner info");
 				Log.printLine(pInfo.toString());
 			}
