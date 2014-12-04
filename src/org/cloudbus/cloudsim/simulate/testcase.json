@@ -31,14 +31,24 @@
 				"vmm": "Xen"
 			}
 		},
-		"cloudlets": {
-			"quantity": 7,
-			"long": 400000,
-			"fileSize": 300,
-			"outputSize": 300,
-			"pesNumber": 1,
-			"deadline": 1000.3
-		}
+		"cloudlets": [
+			{
+				"quantity": 7,
+				"long": 400000,
+				"fileSize": 300,
+				"outputSize": 300,
+				"pesNumber": 1,
+				"deadline": 1000.3
+			},
+			{
+				"quantity": 5,
+				"long": 80000,
+				"fileSize": 300,
+				"outputSize": 300,
+				"pesNumber": 1,
+				"deadline": 500.1
+			}
+		]
 	},
 	{
 		"name": "Broker_HCMUT",
@@ -72,14 +82,16 @@
 				"vmm": "Xen"
 			}
 		},
-		"cloudlets": {
-			"quantity": 1,
-			"long": 40000,
-			"fileSize": 300,
-			"outputSize": 300,
-			"pesNumber": 1,
-			"deadline": 100.3
-		}
+		"cloudlets": [
+			{
+				"quantity": 1,
+				"long": 40000,
+				"fileSize": 300,
+				"outputSize": 300,
+				"pesNumber": 1,
+				"deadline": 100.3
+			}
+		]
 	},
 	{
 		"name": "Broker_A1",
@@ -113,13 +125,15 @@
 				"vmm": "Xen"
 			}
 		},
-		"cloudlets": {
-			"quantity": 2,
-			"long": 40000,
-			"fileSize": 300,
-			"outputSize": 300,
-			"pesNumber": 1,
-			"deadline": 100.3
-		}
+		"cloudlets": [
+			{
+				"quantity": 2,
+				"long": 40000,
+				"fileSize": 300,
+				"outputSize": 300,
+				"pesNumber": 1,
+				"deadline": 100.3
+			}
+		]
 	},
 ]

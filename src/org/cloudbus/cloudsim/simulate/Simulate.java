@@ -7,7 +7,6 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.math3.genetics.TournamentSelection;
 import org.cloudbus.cloudsim.Cloudlet;
 import org.cloudbus.cloudsim.CloudletSchedulerSpaceShared;
 import org.cloudbus.cloudsim.DatacenterBroker;
@@ -35,8 +34,8 @@ import org.json.simple.parser.JSONParser;
  */
 public class Simulate {
 	
-//	private static final String filePath = "C:\\Users\\Kahn\\Downloads\\testcase.json";
-	private static final String filePath = "/home/ngtrieuvi92/zz/scheduler_simulation/src/org/cloudbus/cloudsim/simulate/testcase.json";
+	private static final String filePath = "C:\\Users\\Kahn\\Downloads\\testcase.json";
+//	private static final String filePath = "/home/ngtrieuvi92/zz/scheduler_simulation/src/org/cloudbus/cloudsim/simulate/testcase.json";
 	
 	
 	private static List<DatacenterBroker> brokersList;
@@ -86,31 +85,31 @@ public class Simulate {
             	createVm(vmList, m_vm, broker);
             	broker.submitVmList(vmList);
             	
-            	JSONObject m_cloudlet = (JSONObject) member.get("cloudlets");
-            	if (m_cloudlet == null) {
+            	JSONArray m_cloudlets = (JSONArray) member.get("cloudlets");
+            	if (m_cloudlets == null) {
             		Log.printLine(broker.getName() + ": There is no cloudlet");
             		continue;
             	}
             	
-            	int cloudlet_quantity = ((Long) m_cloudlet.get("quantity")).intValue();
-            	int cloudletId_prefix = broker.getId() * 1000;
-            	
-        		long length = (Long) m_cloudlet.get("long");
-        		long fileSize = (Long) m_cloudlet.get("fileSize");
-        		long outputSize = (Long) m_cloudlet.get("outputSize");
-        		int pesNumber = ((Long) m_cloudlet.get("pesNumber")).intValue();
-        		double deadline = (Double) m_cloudlet.get("deadline");
-            	
-            	for (int j = 0; j < cloudlet_quantity; j++) {          		
-            		UtilizationModel utilizationModel = new UtilizationModelFull();
-            		
-            		Cloudlet cloudlet = new Cloudlet(cloudletId_prefix + j, length, pesNumber, fileSize, outputSize, 
-            				utilizationModel, utilizationModel, utilizationModel, deadline);
-            		cloudlet.setUserId(broker.getId());
-            		cloudletList.add(cloudlet);
-            		
-//            		Log.printLine("Cloudlet #" + cloudlet.getCloudletId() 
-//            				+ " has been created and is belonged to Broker #" + cloudlet.getUserId());
+            	for (int j = 0; j < m_cloudlets.size(); j++) {
+            		JSONObject m_cloudlet = (JSONObject) m_cloudlets.get(j);
+	            	int cloudlet_quantity = ((Long) m_cloudlet.get("quantity")).intValue();
+	            	int cloudletId_prefix = broker.getId() * 10000 + j * 1000;
+	            	
+	        		long length = (Long) m_cloudlet.get("long");
+	        		long fileSize = (Long) m_cloudlet.get("fileSize");
+	        		long outputSize = (Long) m_cloudlet.get("outputSize");
+	        		int pesNumber = ((Long) m_cloudlet.get("pesNumber")).intValue();
+	        		double deadline = (Double) m_cloudlet.get("deadline");
+	            	
+	            	for (int k = 0; k < cloudlet_quantity; k++) {          		
+	            		UtilizationModel utilizationModel = new UtilizationModelFull();
+	            		
+	            		Cloudlet cloudlet = new Cloudlet(cloudletId_prefix + k, length, pesNumber, fileSize, outputSize, 
+	            				utilizationModel, utilizationModel, utilizationModel, deadline);
+	            		cloudlet.setUserId(broker.getId());
+	            		cloudletList.add(cloudlet);
+	            	}
             	}
 
             	broker.submitCloudletList(cloudletList);
@@ -189,8 +188,6 @@ public class Simulate {
 				
 				broker.addDatacenter(datacenter.getId());
 				
-//				Log.printLine("Datacenter #" + datacenter.getId() 
-//						+ " has been created and is belonged to Broker #" + datacenter.getDatacenterBrokerId());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -308,10 +305,10 @@ public class Simulate {
 		
 		for (int i = 0; i < totalPartner; i++) {
 			PartnerInfomation pInfo = partnerInfo.get(i);
-			totalKRatio += pInfo.getKRatio();
+			totalKRatio += pInfo.getkRatio();
 		}
 		
-		Log.printLine(totalCloudlet + indent + successCloudlet + indent + dft.format(successCloudlet / totalCloudlet * 100) + "%"
+		Log.printLine(totalCloudlet + indent + successCloudlet + indent + dft.format((double)successCloudlet / totalCloudlet * 100) + "%"
 				+ indent + dft.format(totalKRatio / totalPartner * 100) + "%");
 	}
 }
