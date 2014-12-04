@@ -6,6 +6,7 @@ scheduler_simulator
 - Config build path to compile with 2 jar files in ```libs```
 - Edit file ```org.cloudbus.cloudsim.simulate.Simulate```, change testcase file path
 - Run file ```org.cloudbus.cloudsim.simulate.Simulate```
+- The default ratio is the ratio of total virtual machines between them
 
 
 ## Testcase structure ##
