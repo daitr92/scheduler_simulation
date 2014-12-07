@@ -97,7 +97,7 @@ public class PartnerInfomation {
 	public double calcLenghtRatio(double request_lenght,double satify_lenght){
 		double deviation;
 		if(this.getSatified() != 0 ){
-			deviation = (this.getRequested()+request_lenght)/(getSatified()+satify_lenght);
+			deviation = (getSatified()+satify_lenght)/(this.getRequested()+request_lenght);
 		}
 		else {
 			deviation = 0;
