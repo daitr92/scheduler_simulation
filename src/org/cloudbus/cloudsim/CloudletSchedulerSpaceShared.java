@@ -456,7 +456,7 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 		
 		if (getCloudletExecList().isEmpty()) {
 			
-			double time = getLastEstimated().getBestFinishTime();
+			double time = getLastEstimated().getBestFinishTime() - CloudSim.clock();
 
 			est.setCloudletStatus(Cloudlet.INEXEC);
 			

@@ -34,8 +34,8 @@ import org.json.simple.parser.JSONParser;
  */
 public class Simulate {
 	
-//	private static final String filePath = "C:\\Users\\Kahn\\Downloads\\testcase.json";
-	private static final String filePath = "/home/ngtrieuvi92/zz/scheduler_simulation/src/org/cloudbus/cloudsim/simulate/testcase.json";
+	private static final String filePath = "C:\\Users\\Kahn\\Downloads\\testcase.json";
+//	private static final String filePath = "/home/ngtrieuvi92/zz/scheduler_simulation/src/org/cloudbus/cloudsim/simulate/testcase.json";
 	
 	
 	private static List<DatacenterBroker> brokersList;
@@ -74,16 +74,12 @@ public class Simulate {
             	CustomDatacenterBroker broker = createBroker(m_name);
             	brokersList.add(broker);
             	
-            	List<Vm> vmList = new ArrayList<Vm>();
+//            	List<Vm> vmList = new ArrayList<Vm>();
             	List<Cloudlet> cloudletList = new ArrayList<Cloudlet>();
             	
             	// Create datacenters
             	JSONObject m_datacenters = (JSONObject) member.get("datacenters");
             	createDatacenter(m_datacenters, broker);
-            	
-            	JSONObject m_vm = (JSONObject) m_datacenters.get("vms");
-            	createVm(vmList, m_vm, broker);
-            	broker.submitVmList(vmList);
             	
             	JSONArray m_cloudlets = (JSONArray) member.get("cloudlets");
             	if (m_cloudlets == null) {
@@ -189,16 +185,21 @@ public class Simulate {
 				
 				broker.addDatacenter(datacenter.getId());
 				
+				List<Vm> vmList = new ArrayList<Vm>();
+            	JSONObject m_vm = (JSONObject) d_info.get("vms");
+            	createVm(vmList, m_vm, broker, i);
+            	broker.submitVmList(vmList);
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
 	
-	private static void createVm(List<Vm> vmList, JSONObject m_vm, CustomDatacenterBroker broker) {
+	private static void createVm(List<Vm> vmList, JSONObject m_vm, CustomDatacenterBroker broker, int datacenterIndex) {
 		String brokerName = broker.getName();
 		int vm_quantity = ((Long) m_vm.get("quantity")).intValue();
-		int vmId_prefix = broker.getId() * 1000;
+		int vmId_prefix = broker.getId() * 1000 + datacenterIndex * 100;
 		for (int i = 0; i < vm_quantity; i++) {
 			int mips = ((Long) m_vm.get("mips")).intValue();
 			long size = (Long) m_vm.get("size"); // image size (MB)
