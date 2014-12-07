@@ -25,6 +25,7 @@ import org.cloudbus.cloudsim.core.CloudSim;
  */
 public class Cloudlet {
 
+
 	/**
 	 * The User or Broker ID. It is advisable that broker set this ID with its own ID, so that
 	 * CloudResource returns to it after the execution.
@@ -1482,6 +1483,18 @@ public class Cloudlet {
 
 	public void setDeadlineTime(double deadlineTime) {
 		this.deadlineTime = deadlineTime;
+	}
+	
+	
+	@Override
+	public String toString() {
+		return "Cloudlet [userId=" + userId + ", cloudletLength="
+				+ cloudletLength + ", cloudletFileSize=" + cloudletFileSize
+				+ ", cloudletOutputSize=" + cloudletOutputSize
+				+ ", numberOfPes=" + numberOfPes + ", cloudletId=" + cloudletId
+				+ ", status=" + status + ", num=" + num + ", finishTime="
+				+ finishTime + ", deadlineTime=" + deadlineTime
+				+ ", execStartTime=" + execStartTime + ", vmId=" + vmId + "]";
 	}
 
 }
