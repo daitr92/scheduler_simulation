@@ -7,9 +7,11 @@ import org.cloudbus.cloudsim.CloudletScheduler;
 import org.cloudbus.cloudsim.Datacenter;
 import org.cloudbus.cloudsim.DatacenterCharacteristics;
 import org.cloudbus.cloudsim.Host;
+import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.Storage;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.VmAllocationPolicy;
+import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.CloudSimTags;
 import org.cloudbus.cloudsim.core.SimEvent;
 
@@ -184,7 +186,7 @@ public class CustomDatacenter extends Datacenter {
 	private void estimateTask(SimEvent ev) {
 		CustomResCloudlet rcl = (CustomResCloudlet) ev.getData();
 		Cloudlet cl = rcl.getCloudlet();
-		
+//		Log.printLine(CloudSim.clock()+ " estimating task #"+cl.getCloudletId()+ "; user request time "+ cl.getUserRequestTime());		
 		// time to transfer the files
 		double fileTransferTime = predictFileTransferTime(cl.getRequiredFiles());
 		
@@ -202,7 +204,6 @@ public class CustomDatacenter extends Datacenter {
 				bestVm.getCloudletScheduler().setLastEstimated(rcl);
 			}
 		}
-		
 		rcl.setBestFinishTime(bestFinishTime);
 		if (bestVm != null) {
 			rcl.setBestVmId(bestVm.getId());

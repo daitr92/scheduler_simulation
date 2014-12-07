@@ -334,10 +334,10 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 		//build list partner
 		for(SimEntity en: entityList){
 			if (en instanceof DatacenterBroker  && en.getId() != getId()) {
-				//TODO: i'm hardcode the ratio by 1. fix it;
 				DatacenterBroker item = (DatacenterBroker) en;
 				int item_size = item.getVmList().size();
 				double alphaRatio = (double)ownVMSize/item_size;
+//				double alphaRatio = 1;
 				Log.printLine("Debug: alpha ratio; "+alphaRatio);
 				PartnerInfomation partnerInfoItem   = new PartnerInfomation(en.getId(), alphaRatio);
 				Log.printLine(partnerInfoItem.toString());

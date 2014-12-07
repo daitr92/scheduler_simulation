@@ -1,5 +1,7 @@
 package org.cloudbus.cloudsim.simulate;
 
+import org.cloudbus.cloudsim.Log;
+
 public class PartnerInfomation {
 
 	private int partnerId;
@@ -96,6 +98,7 @@ public class PartnerInfomation {
 		double deviation;
 		if(this.getSatified() != 0 ){
 			deviation = (getSatified()+satify_lenght)/(this.getRequested()+request_lenght);
+//			deviation = (this.getRequested()+request_lenght)/(getSatified()+satify_lenght);
 		}
 		else {
 			deviation = 0;
@@ -122,7 +125,12 @@ public class PartnerInfomation {
 		if(this.getRatio() == 0 ){
 			k = 1;
 		} else {
-			k = Math.abs((getLenghtRatio()+calcLenghtRatio(request_lenght, satify_lenght))/getRatio()-1);
+			k = Math.abs((calcLenghtRatio(request_lenght, satify_lenght))/getRatio()-1);
+//			Log.printLine("request_lenght: "+(getRequested()+request_lenght));
+//			Log.printLine("satify_lenght: "+(getSatified()+satify_lenght));
+//			Log.printLine("L: "+calcLenghtRatio(request_lenght, satify_lenght));
+//			Log.printLine("Alpha: "+getRatio());
+//			Log.printLine("K: "+k);
 		}
 		return k;
 	}

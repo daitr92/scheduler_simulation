@@ -1,8 +1,52 @@
 [
 	{
-		"name": "Broker_HCMUS",
+		"name": "A1",
 		"datacenters": {
-			"quantity": 3,
+			"quantity": 1,
+			"arch": "x86",
+			"os": "Linux",
+			"vmm": "Xen",
+			"time_zone": 10.0,
+			"cost": 3.0,
+			"costPerMem": 0.05,
+			"costPerStorage": 0.001,
+			"costPerBw": 0.0,
+			"hosts": {
+				"quantity": 1,
+				"ram": 2048,
+				"storage": 100000,
+				"bw": 10000,
+				"pes": {
+					"mips": 5000,
+					"quantity": 10
+				}
+			},
+			"vms": {
+				"quantity": 2,
+				"mips": 2000,
+				"size": 1000,
+				"ram": 1024,
+				"bw": 10,
+				"pesNumber": 1,
+				"vmm": "Xen"
+			}
+		},
+		"cloudlets": [
+			{
+				"quantity": 21,
+				"long": 120000,
+				"fileSize": 300,
+				"outputSize": 300,
+				"pesNumber": 1,
+				"userRequestTime": 0,
+				"deadline": 360.5
+			},
+		]
+	},
+	{
+		"name": "A2",
+		"datacenters": {
+			"quantity": 1,
 			"arch": "x86",
 			"os": "Linux",
 			"vmm": "Xen",
@@ -22,7 +66,7 @@
 				}
 			},
 			"vms": {
-				"quantity": 1,
+				"quantity": 3,
 				"mips": 2000,
 				"size": 1000,
 				"ram": 1024,
@@ -33,49 +77,40 @@
 		},
 		"cloudlets": [
 			{
-				"quantity": 7,
-				"long": 400000,
+				"quantity": 9,
+				"long": 120000,
 				"fileSize": 300,
 				"outputSize": 300,
 				"pesNumber": 1,
-				"userRequestTime": 200,
-				"deadline": 1000.3
+				"userRequestTime": 0,
+				"deadline": 360.5
+			}
+			
+		]
+	},	{
+		"name": "A3",
+		"datacenters": {
+			"quantity": 1,
+			"arch": "x86",
+			"os": "Linux",
+			"vmm": "Xen",
+			"time_zone": 10.0,
+			"cost": 3.0,
+			"costPerMem": 0.05,
+			"costPerStorage": 0.001,
+			"costPerBw": 0.0,
+			"hosts": {
+				"quantity": 2,
+				"ram": 4096,
+				"storage": 100000,
+				"bw": 10000,
+				"pes": {
+					"mips": 50000,
+					"quantity": 20
+				}
 			},
-			{
+			"vms": {
 				"quantity": 5,
-				"long": 80000,
-				"fileSize": 300,
-				"outputSize": 300,
-				"pesNumber": 1,
-				"userRequestTime": 200,
-				"deadline": 500.1
-			}
-		]
-	},
-	{
-		"name": "Broker_HCMUT",
-		"datacenters": {
-			"quantity": 3,
-			"arch": "x86",
-			"os": "Linux",
-			"vmm": "Xen",
-			"time_zone": 10.0,
-			"cost": 3.0,
-			"costPerMem": 0.05,
-			"costPerStorage": 0.001,
-			"costPerBw": 0.0,
-			"hosts": {
-				"quantity": 2,
-				"ram": 2048,
-				"storage": 100000,
-				"bw": 10000,
-				"pes": {
-					"mips": 5000,
-					"quantity": 10
-				}
-			},
-			"vms": {
-				"quantity": 1,
 				"mips": 2000,
 				"size": 1000,
 				"ram": 1024,
@@ -86,58 +121,16 @@
 		},
 		"cloudlets": [
 			{
-				"quantity": 1,
-				"long": 40000,
+				"quantity": 32,
+				"long": 120000,
 				"fileSize": 300,
 				"outputSize": 300,
 				"pesNumber": 1,
-				"userRequestTime": 200,
-				"deadline": 100.3
-			}
-		]
-	},
-	{
-		"name": "Broker_A1",
-		"datacenters": {
-			"quantity": 3,
-			"arch": "x86",
-			"os": "Linux",
-			"vmm": "Xen",
-			"time_zone": 10.0,
-			"cost": 3.0,
-			"costPerMem": 0.05,
-			"costPerStorage": 0.001,
-			"costPerBw": 0.0,
-			"hosts": {
-				"quantity": 2,
-				"ram": 2048,
-				"storage": 100000,
-				"bw": 10000,
-				"pes": {
-					"mips": 5000,
-					"quantity": 10
-				}
+				"userRequestTime": 0,
+				"deadline": 420.5
 			},
-			"vms": {
-				"quantity": 1,
-				"mips": 2000,
-				"size": 1000,
-				"ram": 1024,
-				"bw": 10,
-				"pesNumber": 1,
-				"vmm": "Xen"
-			}
-		},
-		"cloudlets": [
-			{
-				"quantity": 2,
-				"long": 40000,
-				"fileSize": 300,
-				"outputSize": 300,
-				"pesNumber": 1,
-				"userRequestTime": 200,
-				"deadline": 100.3
-			}
+		
 		]
-	},
+	}
+	
 ]
