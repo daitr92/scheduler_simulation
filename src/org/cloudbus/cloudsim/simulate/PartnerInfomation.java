@@ -41,7 +41,7 @@ public class PartnerInfomation {
 		this.requested = 0;
 		this.satified = 0;
 		this.lenghtRatio = 0;
-		this.kRatio = 1;
+		this.kRatio = 0;
 	}
 	
 	public PartnerInfomation(int partnerId, double ratio) {
@@ -51,7 +51,7 @@ public class PartnerInfomation {
 		this.requested = 100000;
 		this.satified = 100000;
 		this.lenghtRatio = 1;
-		this.kRatio = 1;
+		this.kRatio = 0;
 	}
 
 	@Override
