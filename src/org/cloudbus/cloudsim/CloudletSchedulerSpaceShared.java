@@ -400,7 +400,8 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 			CustomResCloudlet last_rcl = execList.get(execList.size() - 1);
 			return last_rcl.getBestFinishTime() + exec_time;
 		} else {
-			return exec_time + CloudSim.clock();
+//			return exec_time + CloudSim.clock();
+			return exec_time ;
 		}
 	}
 
