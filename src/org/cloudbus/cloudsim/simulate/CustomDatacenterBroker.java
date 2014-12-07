@@ -1,6 +1,7 @@
 package org.cloudbus.cloudsim.simulate;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,6 +105,7 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 	}
 	private void addCloudletToEstimationList(Cloudlet cloudlet) {
 		getEstimationList().add(cloudlet);
+		Collections.sort(getEstimationList(), new CloudletComparator());
 		if (estimationStatus == STOPPED) {
 			setEstimationStatus(RUNNING);
 			sendNow(getId(), CloudSimTags.BROKER_ESTIMATE_NEXT_TASK);
@@ -119,7 +121,9 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 			
 			for (Integer datacenterId: getDatacenterIdsList()) {
 				CustomResCloudlet rcl = new CustomResCloudlet(cloudlet);
-				sendNow(datacenterId, CloudSimTags.DATACENTER_ESTIMATE_TASK, rcl);
+//				send(datacenterId, CloudSimTags.DATACENTER_ESTIMATE_TASK, rcl);
+				send(datacenterId, cloudlet.getUserRequestTime() - CloudSim.clock(), 
+						CloudSimTags.DATACENTER_ESTIMATE_TASK, rcl);
 			}
 		}
 	}
@@ -177,7 +181,8 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 					sendNow(observe.getResCloudlet().getUserId(), CloudSimTags.PARTNER_ESTIMATE_RETURN, observe.getResCloudlet());
 				}
 				
-				getEstimationList().remove(0);
+				// TODO test
+				getEstimationList().remove(re_rcl.getCloudlet());
 			}
 		}
 	}
@@ -229,42 +234,6 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 			sendNow(datacenterId, CloudSimTags.RESOURCE_CHARACTERISTICS, getId());
 		}
 	}
-	/**
-	 * Receive request estimate from own datacenter, process to send it to partner
-	 * 
-	 */
-	@Override	
-	protected void processPartnerCloudletInternalEstimateRequest(SimEvent ev){
-		//TODO: not implement ratio
-
-//		Cloudlet cl = (Cloudlet) ev.getData();
-//		cl.setUserId(getId());
-//		CustomResCloudlet rCl = new CustomResCloudlet(cl); 
-//		List<Integer> partnerIdsList  = new ArrayList<Integer>();
-//		for( PartnerInfomation partnerInfo : this.getPartnersList()){
-//			Log.printLine(CloudSim.clock()+ ": "+ getName()+": #"+ getId() +" Cloudlet #"+ cl.getCloudletId()+ " have been send to broker #"+partnerInfo.getPartnerId());
-//			//send to partner
-//			send(partnerInfo.getPartnerId(), 0, CloudSimTags.PARTNER_ESTIMATE_REQUEST, rCl);
-//			partnerIdsList.add(partnerInfo.getPartnerId());
-//		}
-//		EstimationCloudletOfPartner esOfPatner = new EstimationCloudletOfPartner(rCl, getPartnersList(),partnersList);
-//		getEstimateCloudletofParnerMap().put(rCl.getCloudletId(), esOfPatner);
-
-//		Cloudlet cl = (Cloudlet) ev.getData();
-//		cl.setUserId(getId());
-//		CustomResCloudlet rCl = new CustomResCloudlet(cl); 
-//		List<Integer> partnerIdsList  = new ArrayList<Integer>();
-//		for( PartnerInfomation partnerInfo : this.getPartnersList()){
-//				Log.printLine(CloudSim.clock()+ ": "+ getName()+": #"+ getId() +" Cloudlet #"+ cl.getCloudletId()+ " have been send to broker #"+partnerInfo.getPartnerId());
-//				//send to partner
-//				send(partnerInfo.getPartnerId(), 0, CloudSimTags.PARTNER_ESTIMATE_REQUEST, cl);
-//				partnerIdsList.add(partnerInfo.getPartnerId());
-//		}
-//		EstimationCloudletOfPartner esOfPatner = new EstimationCloudletOfPartner(rCl, partnerIdsList);
-//		getEstimateCloudletofParnerMap().put(rCl.getCloudletId(), esOfPatner);
-
-	}		
-		
 	
 	/**
 	 * Receive request estimate from partner. send it to add own datacenter to estimate

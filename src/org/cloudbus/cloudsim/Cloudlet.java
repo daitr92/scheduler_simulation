@@ -64,6 +64,8 @@ public class Cloudlet {
 	 * My code
 	 */
 	private double deadlineTime;
+	
+	private double userRequestTime;
 
 	/**
 	 * Start time of executing this Cloudlet. With new functionalities, such as CANCEL, PAUSED and
@@ -184,7 +186,8 @@ public class Cloudlet {
 			final UtilizationModel utilizationModelCpu,
 			final UtilizationModel utilizationModelRam,
 			final UtilizationModel utilizationModelBw,
-			double deadlineTime) {
+			double deadlineTime,
+			double userRequestTime) {
 		this(
 				cloudletId,
 				cloudletLength,
@@ -195,7 +198,8 @@ public class Cloudlet {
 				utilizationModelRam,
 				utilizationModelBw,
 				false,
-				deadlineTime);
+				deadlineTime,
+				userRequestTime);
 		vmId = -1;
 		accumulatedBwCost = 0.0;
 		costPerBw = 0.0;
@@ -237,7 +241,8 @@ public class Cloudlet {
 			final UtilizationModel utilizationModelBw,
 			final boolean record,
 			final List<String> fileList,
-			double deadlineTime) {
+			double deadlineTime,
+			double userRequestTime) {
 		this(
 				cloudletId,
 				cloudletLength,
@@ -248,7 +253,8 @@ public class Cloudlet {
 				utilizationModelRam,
 				utilizationModelBw,
 				record,
-				deadlineTime);
+				deadlineTime,
+				userRequestTime);
 		vmId = -1;
 		accumulatedBwCost = 0.0;
 		costPerBw = 0.0;
@@ -288,7 +294,8 @@ public class Cloudlet {
 			final UtilizationModel utilizationModelRam,
 			final UtilizationModel utilizationModelBw,
 			final List<String> fileList,
-			double deadlineTime) {
+			double deadlineTime,
+			double userRequestTime) {
 		this(
 				cloudletId,
 				cloudletLength,
@@ -299,7 +306,8 @@ public class Cloudlet {
 				utilizationModelRam,
 				utilizationModelBw,
 				false,
-				deadlineTime);
+				deadlineTime,
+				userRequestTime);
 		vmId = -1;
 		accumulatedBwCost = 0.0;
 		costPerBw = 0.0;
@@ -339,7 +347,8 @@ public class Cloudlet {
 			final UtilizationModel utilizationModelRam,
 			final UtilizationModel utilizationModelBw,
 			final boolean record,
-			double deadlineTime) {
+			double deadlineTime,
+			double userRequestTime) {
 		userId = -1;          // to be set by a Broker or user
 		status = CREATED;
 		this.cloudletId = cloudletId;
@@ -349,6 +358,7 @@ public class Cloudlet {
 		classType = 0;
 		netToS = 0;
 		setDeadlineTime(deadlineTime);
+		setUserRequestTime(userRequestTime);
 
 		// Cloudlet length, Input and Output size should be at least 1 byte.
 		this.cloudletLength = Math.max(1, cloudletLength);
@@ -1482,6 +1492,14 @@ public class Cloudlet {
 
 	public void setDeadlineTime(double deadlineTime) {
 		this.deadlineTime = deadlineTime;
+	}
+
+	public double getUserRequestTime() {
+		return userRequestTime;
+	}
+
+	public void setUserRequestTime(double userRequestTime) {
+		this.userRequestTime = userRequestTime;
 	}
 
 }
