@@ -1,7 +1,5 @@
 package org.cloudbus.cloudsim.simulate;
 
-import org.cloudbus.cloudsim.Log;
-
 public class PartnerInfomation {
 
 	private int partnerId;

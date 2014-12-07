@@ -97,10 +97,10 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 
 	@Override
 	protected void submitCloudlets() {
-//		Log.printLine(this.getName() + " submit Cloudlet");
+		Log.printLine(this.getName() + " submit Cloudlet");
 		for (Cloudlet cloudlet: getCloudletList()) {
 			addCloudletToEstimationList(cloudlet);
-//			Log.printLine("Cloudlet #" + cloudlet.getCloudletId() + " has been submitted!");
+			Log.printLine("Cloudlet #" + cloudlet.getCloudletId() + " has been submitted!");
 		}
 	}
 	private void addCloudletToEstimationList(Cloudlet cloudlet) {
@@ -150,8 +150,8 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 	}
 	
 	protected void processInternalEstimateReturn(SimEvent ev) {
-//		Log.printLine(getName() + ": Receive internal response from datacenter #" + ev.getSource());
 		CustomResCloudlet re_rcl = (CustomResCloudlet) ev.getData();
+		Log.printLine(getName() + ": Receive internal response from datacenter #" + ev.getSource() + ": " + re_rcl.getBestFinishTime());
 		
 		if (getCloudletEstimateObserveMap().containsKey(re_rcl.getUserId())) {
 			Map<Integer, EstimationCloudletObserve> obserMap = getCloudletEstimateObserveMap().get(re_rcl.getUserId());
@@ -253,7 +253,7 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 	@Override
 	protected void processReturnEstimateFromPartner(SimEvent ev) {
 		CustomResCloudlet rcl =(CustomResCloudlet) ev.getData();
-//		Log.printLine(CloudSim.clock() + ": " + getName() + ": Received estimate result from Broker #" + ev.getSource() +"Cloudlet #"+rcl.getCloudletId()+":"+rcl.getBestFinishTime());
+		Log.printLine(CloudSim.clock() + ": " + getName() + ": Received estimate result from Broker #" + ev.getSource() +"Cloudlet #"+rcl.getCloudletId()+":"+rcl.getBestFinishTime());
 		if (getEstimateCloudletofParnerMap().containsKey(rcl.getCloudletId())) {
 			EstimationCloudletOfPartner partnerCloudletEstimateList = getEstimateCloudletofParnerMap().get(rcl.getCloudletId());
 		
@@ -265,8 +265,8 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 			if (partnerCloudletEstimateList.isFinished()) {
 				CustomResCloudlet resCloudlet = partnerCloudletEstimateList.getResCloudlet();
 				if(partnerCloudletEstimateList.isExecable()){
-//					Log.printLine(getName() + ": Send Cloudlet #" + resCloudlet.getCloudletId() 
-//							+ " to Partner #" + partnerCloudletEstimateList.getCurrentBestPartnerId() + " to EXEC");
+					Log.printLine(getName() + ": Send Cloudlet #" + resCloudlet.getCloudletId() 
+							+ " to Partner #" + partnerCloudletEstimateList.getCurrentBestPartnerId() + " to EXEC");
 					PartnerInfomation best  = partnerCloudletEstimateList.getCurrentBestPartner();
 					Log.printLine(getName()+" Best K ratio:"+best.getkRatio() + " of cloudlet #" + resCloudlet.getCloudletId()+"is partner #"+partnerCloudletEstimateList.getCurrentBestPartnerId());
 					updatePartnerInformation(partnerCloudletEstimateList.getCurrentBestPartner());

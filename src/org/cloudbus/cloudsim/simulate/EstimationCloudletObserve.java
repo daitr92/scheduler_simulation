@@ -2,8 +2,6 @@ package org.cloudbus.cloudsim.simulate;
 
 import java.util.List;
 
-import org.cloudbus.cloudsim.Log;
-
 public class EstimationCloudletObserve {
 	private List<Integer> datacenterList;
 	private CustomResCloudlet resCloudlet;

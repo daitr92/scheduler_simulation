@@ -2,7 +2,6 @@ package org.cloudbus.cloudsim.simulate;
 
 import java.util.List;
 
-import org.apache.commons.math3.analysis.function.Max;
 import org.cloudbus.cloudsim.Log;
 
 public class EstimationCloudletOfPartner {
