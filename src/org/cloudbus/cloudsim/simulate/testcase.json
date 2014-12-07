@@ -38,6 +38,7 @@
 				"fileSize": 300,
 				"outputSize": 300,
 				"pesNumber": 1,
+				"userRequestTime": 200,
 				"deadline": 1000.3
 			},
 			{
@@ -46,6 +47,7 @@
 				"fileSize": 300,
 				"outputSize": 300,
 				"pesNumber": 1,
+				"userRequestTime": 200,
 				"deadline": 500.1
 			}
 		]
@@ -89,6 +91,7 @@
 				"fileSize": 300,
 				"outputSize": 300,
 				"pesNumber": 1,
+				"userRequestTime": 200,
 				"deadline": 100.3
 			}
 		]
@@ -132,6 +135,7 @@
 				"fileSize": 300,
 				"outputSize": 300,
 				"pesNumber": 1,
+				"userRequestTime": 200,
 				"deadline": 100.3
 			}
 		]

@@ -42,6 +42,7 @@ public class WorkflowApp extends AppCloudlet {
 		int memory = 100;
 		UtilizationModel utilizationModel = new UtilizationModelFull();
 		double deadlineTime = 0;
+		double userRequestTime = 0;
 		int i = 0;
 		// Task A
 		NetworkCloudlet cl = new NetworkCloudlet(
@@ -53,7 +54,7 @@ public class WorkflowApp extends AppCloudlet {
 				memory,
 				utilizationModel,
 				utilizationModel,
-				utilizationModel, deadlineTime);
+				utilizationModel, deadlineTime, userRequestTime);
 		cl.numStage = 2;
 		NetworkConstants.currentCloudletId++;
 		cl.setUserId(userId);
@@ -79,7 +80,8 @@ public class WorkflowApp extends AppCloudlet {
 				utilizationModel,
 				utilizationModel,
 				utilizationModel,
-				deadlineTime);
+				deadlineTime,
+				userRequestTime);
 		clb.numStage = 2;
 		NetworkConstants.currentCloudletId++;
 		clb.setUserId(userId);
@@ -113,7 +115,8 @@ public class WorkflowApp extends AppCloudlet {
 				utilizationModel,
 				utilizationModel,
 				utilizationModel,
-				deadlineTime);
+				deadlineTime,
+				userRequestTime);
 		clc.numStage = 2;
 		NetworkConstants.currentCloudletId++;
 		clc.setUserId(userId);

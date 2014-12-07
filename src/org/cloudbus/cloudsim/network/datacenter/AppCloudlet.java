@@ -76,6 +76,7 @@ public class AppCloudlet {
 			int pesNumber = 4;
 			UtilizationModel utilizationModel = new UtilizationModelFull();
 			double deadlineTime = 0;
+			double userRequestTime = 0;
 			// HPCCloudlet cl=new HPCCloudlet();
 			NetworkCloudlet cl = new NetworkCloudlet(
 					NetworkConstants.currentCloudletId,
@@ -87,7 +88,8 @@ public class AppCloudlet {
 					utilizationModel,
 					utilizationModel,
 					utilizationModel,
-					deadlineTime);
+					deadlineTime,
+					userRequestTime);
 			// setting the owner of these Cloudlets
 			NetworkConstants.currentCloudletId++;
 			cl.setUserId(userId);

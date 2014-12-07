@@ -276,6 +276,7 @@ public class WorkloadFileReader implements WorkloadModel {
 		final int len = runTime * rating;
 		UtilizationModel utilizationModel = new UtilizationModelFull();
 		double deadlineTime = 0;
+		double userRequestTime = 0;
 		final Cloudlet wgl = new Cloudlet(
 				id,
 				len,
@@ -285,7 +286,8 @@ public class WorkloadFileReader implements WorkloadModel {
 				utilizationModel,
 				utilizationModel,
 				utilizationModel, 
-				deadlineTime);
+				deadlineTime,
+				userRequestTime);
 		jobs.add(wgl);
 	}
 
