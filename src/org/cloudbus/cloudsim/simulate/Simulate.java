@@ -271,8 +271,7 @@ public class Simulate {
 						+ indent + dft.format(cloudlet.getExecStartTime())
 						+ indent + indent
 						+ dft.format(cloudlet.getFinishTime()));
-			} else 
-				if (cloudlet.getCloudletStatus() == Cloudlet.FAILED) {
+			} else if (cloudlet.getCloudletStatus() == Cloudlet.FAILED) {
 					Log.print("FAILED");
 
 					Log.printLine(indent + indent + cloudlet.getResourceId()
@@ -282,7 +281,17 @@ public class Simulate {
 							+ indent + dft.format(cloudlet.getExecStartTime())
 							+ indent + indent
 							+ dft.format(cloudlet.getFinishTime()));
-				} 
+			} else {
+				Log.print("NOT RETURN");
+
+				Log.printLine(indent + indent + cloudlet.getResourceId()
+						+ indent + indent + indent + cloudlet.getVmId()
+						+ indent + indent
+						+ dft.format(cloudlet.getActualCPUTime()) + indent
+						+ indent + dft.format(cloudlet.getExecStartTime())
+						+ indent + indent
+						+ dft.format(cloudlet.getFinishTime()));
+			}
 		}
 	}
 	
