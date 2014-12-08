@@ -98,6 +98,7 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 			if (rcl.getRemainingCloudletLength() == 0) {
 				toRemove.add(rcl);
 				cloudletFinish(rcl);
+				Log.printLine(CloudSim.clock() + ": Cloudlet #" + rcl.getCloudletId() + " finished!");
 				finished++;
 			}
 		}
@@ -107,6 +108,7 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 		for (int i = 0; i < finished; i++) {
 			if (!getCloudletWaitingList().isEmpty()) {
 				CustomResCloudlet rcl = (CustomResCloudlet) getCloudletWaitingList().get(0);
+				Log.printLine(CloudSim.clock() + ": Cloudlet #" + rcl.getCloudletId() + " is in EXEC!");
 				rcl.setCloudletStatus(Cloudlet.INEXEC);
 				getCloudletExecList().add(rcl);
 				
@@ -458,7 +460,7 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 			
 			double time = getLastEstimated().getBestFinishTime() - CloudSim.clock();
 
-			est.setCloudletStatus(Cloudlet.INEXEC);
+			rcl.setCloudletStatus(Cloudlet.INEXEC);
 			
 			getCloudletExecList().add(rcl);
 			setLastEstimated(null);
@@ -466,7 +468,7 @@ public class CloudletSchedulerSpaceShared extends CloudletScheduler {
 			return time;
 		}
 		
-		est.setCloudletStatus(Cloudlet.QUEUED);
+		rcl.setCloudletStatus(Cloudlet.QUEUED);
 		getCloudletWaitingList().add(rcl);
 		setLastEstimated(null);
 		return 0.0;

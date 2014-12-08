@@ -8,7 +8,7 @@ public class CloudletComparator implements Comparator<Cloudlet> {
 
 	@Override
 	public int compare(Cloudlet cl1, Cloudlet cl2) {
-		return (int)(cl1.getUserRequestTime() - cl2.getUserRequestTime() * 10);
+		return (int)((cl1.getUserRequestTime() - cl2.getUserRequestTime()) * 10);
 	}
 
 }
