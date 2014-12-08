@@ -125,12 +125,14 @@ public class PartnerInfomation {
 		if(this.getRatio() == 0 ){
 			k = 1;
 		} else {
-			k = Math.abs((calcLenghtRatio(request_lenght, satify_lenght))/getRatio()-1);
-//			Log.printLine("request_lenght: "+(getRequested()+request_lenght));
-//			Log.printLine("satify_lenght: "+(getSatified()+satify_lenght));
+//			k = Math.abs((calcLenghtRatio(request_lenght, satify_lenght))/getRatio()-1);
+			k = (calcLenghtRatio(request_lenght, satify_lenght))/getRatio()-1;
+			Log.printLine("request_lenght: "+(getRequested()+request_lenght));
+			Log.printLine("satify_lenght: "+(getSatified()+satify_lenght));
 //			Log.printLine("L: "+calcLenghtRatio(request_lenght, satify_lenght));
-//			Log.printLine("Alpha: "+getRatio());
-//			Log.printLine("K: "+k);
+			Log.printLine("L: "+calcLenghtRatio(0,0));
+			Log.printLine("Alpha: "+getRatio());
+			Log.printLine("K: "+k);
 		}
 		return k;
 	}
@@ -198,3 +200,4 @@ public class PartnerInfomation {
 	}
 
 }
+

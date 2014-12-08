@@ -49,7 +49,7 @@ public class EstimationCloudletOfPartner {
 		if (bestFinishTime < resCloudlet.getCloudlet().getDeadlineTime()){
 			double k = calcPartnerKRatio(partnerId,reResCloudlet);
 			Log.printLine("Cloulet :"+reResCloudlet.getCloudletId()+" K of partner#: "+partnerId + "; K: "+k);
-			if((getCurrentBestPartner().getPartnerId()  == -1) || getCurrentBestPartner().getkRatio() > k || getCurrentBestPartner().getkRatio()  == -1){
+			if((getCurrentBestPartner().getPartnerId()  == -1) || getCurrentBestPartner().getkRatio() < k || getCurrentBestPartner().getkRatio()  == -1){
 				currentBestPartner.setPartnerId(partnerId);
 				getCurrentBestPartner().setkRatio(k);
 				currentBestPartner.setRequested(reResCloudlet.getCloudlet().getCloudletLength());
@@ -63,7 +63,23 @@ public class EstimationCloudletOfPartner {
 				resCloudlet.setBestVmId(reResCloudlet.getBestVmId());
 				currentBestPartnerId = partnerId;
 				
-			}
+			} 
+//			else if( getCurrentBestPartner().getkRatio() == k ) {
+//				if(resCloudlet.getBestFinishTime() > reResCloudlet.getBestFinishTime()){
+//					currentBestPartner.setPartnerId(partnerId);
+//					getCurrentBestPartner().setkRatio(k);
+//					currentBestPartner.setRequested(reResCloudlet.getCloudlet().getCloudletLength());
+////					Log.printLine(getCurrentBestPartner().getkRatio());
+//					partner_cancel_waiting_exec[0] = currentBestPartnerId;
+//					partner_cancel_waiting_exec[1] = resCloudlet.getBestDatacenterId();
+//					partner_cancel_waiting_exec[2] = resCloudlet.getBestVmId();
+//					
+//					resCloudlet.setBestFinishTime(bestFinishTime);
+//					resCloudlet.setBestDatacenterId(reResCloudlet.getBestDatacenterId());
+//					resCloudlet.setBestVmId(reResCloudlet.getBestVmId());
+//					currentBestPartnerId = partnerId;
+//				}
+//			}
 		}
 
 		return partner_cancel_waiting_exec;
@@ -136,7 +152,8 @@ public class EstimationCloudletOfPartner {
 	
 	public boolean isExecable() {
 		boolean is_ontime = resCloudlet.getBestFinishTime() <= resCloudlet.getCloudlet().getDeadlineTime();
-		boolean is_satify_ratio  = getCurrentBestPartner().getkRatio() > 0;
+//		boolean is_satify_ratio  = getCurrentBestPartner().getkRatio() > 0;
+		boolean is_satify_ratio  = true;
 		return (is_ontime && is_satify_ratio);
 	}
 
