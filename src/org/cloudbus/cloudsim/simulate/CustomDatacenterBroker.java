@@ -358,7 +358,7 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 				double alphaRatio = (double)ownVMSize/item_size;
 //				double alphaRatio = 1;
 				Log.printLine("Debug: alpha ratio; "+alphaRatio);
-				PartnerInfomation partnerInfoItem   = new PartnerInfomation(en.getId(), alphaRatio);
+				PartnerInfomation partnerInfoItem   = new PartnerInfomation(en.getId(), alphaRatio,ownVMSize,item_size);
 				Log.printLine(partnerInfoItem.toString());
 				this.getPartnersList().add(partnerInfoItem);
 			}

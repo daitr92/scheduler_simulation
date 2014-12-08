@@ -97,7 +97,7 @@ public class Simulate {
 	        		long outputSize = (Long) m_cloudlet.get("outputSize");
 	        		int pesNumber = ((Long) m_cloudlet.get("pesNumber")).intValue();
 	        		double deadline = (Double) m_cloudlet.get("deadline");
-	        		double userRequestTime = ((Long) m_cloudlet.get("userRequestTime")).intValue();
+	        		double userRequestTime = (Double) m_cloudlet.get("userRequestTime");
 	            	
 	            	for (int k = 0; k < cloudlet_quantity; k++) {          		
 	            		UtilizationModel utilizationModel = new UtilizationModelFull();

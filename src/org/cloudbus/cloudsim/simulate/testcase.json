@@ -1,6 +1,6 @@
 [
 	{
-		"name": "A1",
+		"name": "HCMUSSH",
 		"datacenters": {
 			"quantity": 1,
 			"arch": "x86",
@@ -12,7 +12,7 @@
 			"costPerStorage": 0.001,
 			"costPerBw": 0.0,
 			"hosts": {
-				"quantity": 1,
+				"quantity": 200,
 				"ram": 2048,
 				"storage": 100000,
 				"bw": 10000,
@@ -34,17 +34,26 @@
 		"cloudlets": [
 			{
 				"quantity": 21,
-				"long": 120000,
+				"long": 200000,
 				"fileSize": 300,
 				"outputSize": 300,
 				"pesNumber": 1,
-				"userRequestTime": 0,
-				"deadline": 360.5
+				"userRequestTime": 0.0,
+				"deadline": 600.5
 			},
+			{
+				"quantity": 2,
+				"long": 200000,
+				"fileSize": 300,
+				"outputSize": 300,
+				"pesNumber": 1,
+				"userRequestTime": 900.0,
+				"deadline": 1000.5
+			}
 		]
 	},
 	{
-		"name": "A2",
+		"name": "HCMUT",
 		"datacenters": {
 			"quantity": 1,
 			"arch": "x86",
@@ -56,7 +65,7 @@
 			"costPerStorage": 0.001,
 			"costPerBw": 0.0,
 			"hosts": {
-				"quantity": 2,
+				"quantity": 200,
 				"ram": 2048,
 				"storage": 100000,
 				"bw": 10000,
@@ -78,17 +87,26 @@
 		"cloudlets": [
 			{
 				"quantity": 9,
-				"long": 120000,
+				"long": 200000,
 				"fileSize": 300,
 				"outputSize": 300,
 				"pesNumber": 1,
-				"userRequestTime": 0,
-				"deadline": 360.5
+				"userRequestTime": 0.0,
+				"deadline": 600.5
+			},
+			{
+				"quantity": 20,
+				"long": 200000,
+				"fileSize": 300,
+				"outputSize": 300,
+				"pesNumber": 1,
+				"userRequestTime": 550.0,
+				"deadline": 1000.5
 			}
-			
 		]
-	},	{
-		"name": "A3",
+	},
+	{
+		"name": "HCMUS",
 		"datacenters": {
 			"quantity": 1,
 			"arch": "x86",
@@ -100,13 +118,13 @@
 			"costPerStorage": 0.001,
 			"costPerBw": 0.0,
 			"hosts": {
-				"quantity": 2,
-				"ram": 4096,
+				"quantity": 200,
+				"ram": 2048,
 				"storage": 100000,
 				"bw": 10000,
 				"pes": {
-					"mips": 50000,
-					"quantity": 20
+					"mips": 5000,
+					"quantity": 10
 				}
 			},
 			"vms": {
@@ -122,15 +140,22 @@
 		"cloudlets": [
 			{
 				"quantity": 32,
-				"long": 120000,
+				"long": 200000,
 				"fileSize": 300,
 				"outputSize": 300,
 				"pesNumber": 1,
-				"userRequestTime": 0,
-				"deadline": 420.5
+				"userRequestTime": 0.0,
+				"deadline": 700.5
 			},
-		
+			{
+				"quantity": 25,
+				"long": 200000,
+				"fileSize": 300,
+				"outputSize": 300,
+				"pesNumber": 1,
+				"userRequestTime": 800.0,
+				"deadline": 1300.5
+			}
 		]
 	}
-	
 ]

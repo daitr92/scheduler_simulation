@@ -44,13 +44,13 @@ public class PartnerInfomation {
 		this.kRatio = 0;
 	}
 	
-	public PartnerInfomation(int partnerId, double ratio) {
+	public PartnerInfomation(int partnerId, double ratio,double satified,double requested) {
 		super();
 		this.partnerId = partnerId;
 		this.ratio = ratio;
-		this.requested = 100000;
-		this.satified = 100000;
-		this.lenghtRatio = 1;
+		this.requested = requested;
+		this.satified = satified;
+		this.lenghtRatio = ratio;
 		this.kRatio = 0;
 	}
 
