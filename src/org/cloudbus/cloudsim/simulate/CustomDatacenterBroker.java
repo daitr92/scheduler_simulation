@@ -353,14 +353,19 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 		}
 		//build list partner
 		for(SimEntity en: entityList){
+			PartnerInfomation partnerInfoItem = null;
 			if (en instanceof DatacenterBroker  && en.getId() != getId()) {
 				DatacenterBroker item = (DatacenterBroker) en;
 				int item_size = item.getVmList().size();
-				double alphaRatio = (double)ownVMSize/item_size;
-//				double alphaRatio = 1;
-//				Log.printLine("Debug: alpha ratio; "+alphaRatio);
-				PartnerInfomation partnerInfoItem   = new PartnerInfomation(en.getId(), alphaRatio,ownVMSize*10,item_size*10);
-//				PartnerInfomation partnerInfoItem   = new PartnerInfomation(en.getId(), 1,10,10);
+				if(Simulate.USER_ALPHA_RATIO){
+					double alphaRatio = (double)ownVMSize/item_size;
+					 partnerInfoItem   = new PartnerInfomation(en.getId(), alphaRatio,ownVMSize*10,item_size*10);
+				}
+				else {
+					partnerInfoItem   = new PartnerInfomation(en.getId(), 1,10,10);
+				}
+
+				
 				Log.printLine(partnerInfoItem.toString());
 				this.getPartnersList().add(partnerInfoItem);
 			}

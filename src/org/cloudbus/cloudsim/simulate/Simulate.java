@@ -37,6 +37,12 @@ public class Simulate {
 //	private static final String filePath = "C:\\Users\\Kahn\\Downloads\\testcase.json";
 	private static final String filePath = "/home/ngtrieuvi92/zz/scheduler_simulation/src/org/cloudbus/cloudsim/simulate/testcase_1.json";
 	
+	/**
+	 * if USER_ALPHA_RATIO = true; simulate will apply alpha ratio to calc, 
+	 * if USER_ALPHA_RATIO = false alpha ratio will be set 1:1
+	 */
+	
+	public static final boolean USER_ALPHA_RATIO = true;	
 	
 	private static List<DatacenterBroker> brokersList;
 
@@ -304,7 +310,9 @@ public class Simulate {
 		String indent = "    ";
 		Log.printLine();
 		Log.printLine("========== RESULT ==========");
-
+		Log.printLine("Total" + indent  + "Success" + indent
+				+ "%_success" + indent + "K" + indent);
+		Log.printLine();
 		DecimalFormat dft = new DecimalFormat("###.##");
 		
 		for (int i = 0; i < totalCloudlet; i++) {
@@ -316,11 +324,11 @@ public class Simulate {
 		
 		for (int i = 0; i < totalPartner; i++) {
 			PartnerInfomation pInfo = partnerInfo.get(i);
-			Log.printLine(pInfo.getPartnerId()+":"+pInfo.getkRatio());
+//			Log.printLine(pInfo.getPartnerId()+":"+pInfo.getkRatio());
 			totalKRatio += pInfo.getkRatio();
 		}
 		
-		Log.printLine(totalCloudlet + indent + successCloudlet + indent + dft.format((double)successCloudlet / totalCloudlet * 100) + "%"
-				+ indent + dft.format(totalKRatio / totalPartner * 100) + "%");
+		Log.printLine(totalCloudlet + indent  + indent + successCloudlet + indent + indent +  dft.format((double)successCloudlet / totalCloudlet * 100) + "%"
+				+ indent + indent + dft.format(totalKRatio / totalPartner * 100) + "%");
 	}
 }
