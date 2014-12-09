@@ -35,7 +35,7 @@ import org.json.simple.parser.JSONParser;
 public class Simulate {
 	
 //	private static final String filePath = "C:\\Users\\Kahn\\Downloads\\testcase.json";
-	private static final String filePath = "/home/ngtrieuvi92/zz/scheduler_simulation/src/org/cloudbus/cloudsim/simulate/testcase.json";
+	private static final String filePath = "/home/ngtrieuvi92/zz/scheduler_simulation/src/org/cloudbus/cloudsim/simulate/testcase_1.json";
 	
 	
 	private static List<DatacenterBroker> brokersList;
@@ -316,6 +316,7 @@ public class Simulate {
 		
 		for (int i = 0; i < totalPartner; i++) {
 			PartnerInfomation pInfo = partnerInfo.get(i);
+			Log.printLine(pInfo.getPartnerId()+":"+pInfo.getkRatio());
 			totalKRatio += pInfo.getkRatio();
 		}
 		

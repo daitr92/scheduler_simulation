@@ -121,8 +121,8 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 				
 				if (cloudlet.getUserRequestTime() <= CloudSim.clock()) {
 					
-					Log.printLine(CloudSim.clock() + ": " + getName() 
-							+ ": Estimate cloudlet #" + cloudlet.getCloudletId() + " received at " + cloudlet.getUserRequestTime());
+//					Log.printLine(CloudSim.clock() + ": " + getName() 
+//							+ ": Estimate cloudlet #" + cloudlet.getCloudletId() + " received at " + cloudlet.getUserRequestTime());
 					setEstimationStatus(RUNNING);
 					createCloudletObserve(cloudlet);
 					
@@ -167,7 +167,7 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 	
 	protected void processInternalEstimateReturn(SimEvent ev) {
 		CustomResCloudlet re_rcl = (CustomResCloudlet) ev.getData();
-		Log.printLine(getName() + ": Receive internal response from datacenter #" + ev.getSource() + ": " + re_rcl.getBestFinishTime());
+//		Log.printLine(getName() + ": Receive internal response from datacenter #" + ev.getSource() + ": " + re_rcl.getBestFinishTime());
 		
 		if (getCloudletEstimateObserveMap().containsKey(re_rcl.getUserId())) {
 			Map<Integer, EstimationCloudletObserve> obserMap = getCloudletEstimateObserveMap().get(re_rcl.getUserId());
@@ -247,8 +247,8 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 	protected void processResourceCharacteristicsRequest(SimEvent ev) {
 		setDatacenterCharacteristicsList(new HashMap<Integer, DatacenterCharacteristics>());
 		buildPartnerInfoList(CloudSim.getEntityList());
-		Log.printLine(CloudSim.clock() + ": " + getName() + ": Cloud Resource List received with "
-				+ getDatacenterIdsList().size() + " resource(s)");
+//		Log.printLine(CloudSim.clock() + ": " + getName() + ": Cloud Resource List received with "
+//				+ getDatacenterIdsList().size() + " resource(s)");
 		for (Integer datacenterId : getDatacenterIdsList()) {
 			sendNow(datacenterId, CloudSimTags.RESOURCE_CHARACTERISTICS, getId());
 		}
@@ -311,7 +311,8 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 			if(pInfo.getPartnerId() == currentBestPartner.getPartnerId()){
 				pInfo.updateLenghtRatio(currentBestPartner.getRequested(), 0);
 				pInfo.setRequested(currentBestPartner.getRequested()+pInfo.getRequested());
-				pInfo.setkRatio(currentBestPartner.getKRatio());
+				pInfo.updateKRatio();
+//				pInfo.setkRatio(currentBestPartner.getkRatio());
 //				Log.printLine("updated partner info");
 //				Log.printLine(pInfo.toString());
 			}
@@ -324,7 +325,7 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 			if(pInfo.getPartnerId() == partnerId){
 				pInfo.updateRequested(request);
 				pInfo.updateSatified(satify);
-				pInfo.updateLenghtRatio(0, 0);
+				pInfo.updateLenghtRatio(0, 0);	
 				pInfo.updateKRatio();
 //				Log.printLine("updated partner info");
 //				Log.printLine(pInfo.toString());
@@ -357,9 +358,9 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 				int item_size = item.getVmList().size();
 				double alphaRatio = (double)ownVMSize/item_size;
 //				double alphaRatio = 1;
-				Log.printLine("Debug: alpha ratio; "+alphaRatio);
-				PartnerInfomation partnerInfoItem   = new PartnerInfomation(en.getId(), alphaRatio,ownVMSize*100,item_size*100);
-//				PartnerInfomation partnerInfoItem   = new PartnerInfomation(en.getId(), 1,100,100);
+//				Log.printLine("Debug: alpha ratio; "+alphaRatio);
+				PartnerInfomation partnerInfoItem   = new PartnerInfomation(en.getId(), alphaRatio,ownVMSize*10,item_size*10);
+//				PartnerInfomation partnerInfoItem   = new PartnerInfomation(en.getId(), 1,10,10);
 				Log.printLine(partnerInfoItem.toString());
 				this.getPartnersList().add(partnerInfoItem);
 			}

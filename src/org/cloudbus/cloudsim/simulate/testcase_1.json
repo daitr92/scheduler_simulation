@@ -1,6 +1,6 @@
 [
 	{
-		"name": "A1",
+		"name": "HCMUSSH",
 		"datacenters": {
 			"quantity": 1,
 			"arch": "x86",
@@ -22,7 +22,7 @@
 				}
 			},
 			"vms": {
-				"quantity": 3,
+				"quantity": 2,
 				"mips": 1,
 				"size": 1000,
 				"ram": 1024,
@@ -34,64 +34,36 @@
 		"cloudlets": 
 		[
 			{
-				"quantity": 8,
-				"long": 60,
+				"quantity": 10,
+				"long": 100,
 				"fileSize": 300,
 				"outputSize": 300,
 				"pesNumber": 1,
 				"userRequestTime": 0.0,
-				"deadline": 61.5
+				"deadline": 201.0
 			},
 			{
 				"quantity": 2,
-				"long": 60,
+				"long": 100,
 				"fileSize": 300,
 				"outputSize": 300,
 				"pesNumber": 1,
-				"userRequestTime": 60.0,
-				"deadline": 121.5
-			},
-			{
-				"quantity": 4,
-				"long": 60,
-				"fileSize": 300,
-				"outputSize": 300,
-				"pesNumber": 1,
-				"userRequestTime": 120.0,
-				"deadline": 181.5
+				"userRequestTime": 100.0,
+				"deadline": 401.5
 			},
 			{
 				"quantity": 7,
-				"long": 60,
-				"fileSize": 300,
-				"outputSize": 300,
-				"pesNumber": 1,
-				"userRequestTime": 180.0,
-				"deadline": 241.5
-			},
-			{
-				"quantity": 3,
-				"long": 60,
-				"fileSize": 300,
-				"outputSize": 300,
-				"pesNumber": 1,
-				"userRequestTime": 240.0,
-				"deadline": 301.5
-			},
-			{
-				"quantity": 9,
-				"long": 60,
+				"long": 100,
 				"fileSize": 300,
 				"outputSize": 300,
 				"pesNumber": 1,
 				"userRequestTime": 300.0,
-				"deadline": 361.5
-			},
-			
+				"deadline": 601.5
+			}
 		]
 	},
 	{
-		"name": "A2",
+		"name": "HCMUT",
 		"datacenters": {
 			"quantity": 1,
 			"arch": "x86",
@@ -125,63 +97,27 @@
 		"cloudlets":
 		[
 			{
-				"quantity": 3,
-				"long": 60,
+				"quantity": 14,
+				"long": 100,
 				"fileSize": 300,
 				"outputSize": 300,
 				"pesNumber": 1,
 				"userRequestTime": 0.0,
-				"deadline": 61.5
+				"deadline": 201.5
 			},
 			{
-				"quantity": 8,
-				"long": 60,
-				"fileSize": 300,
-				"outputSize": 300,
-				"pesNumber": 1,
-				"userRequestTime": 60.0,
-				"deadline": 121.5
-			},
-			{
-				"quantity": 9,
-				"long": 60,
-				"fileSize": 300,
-				"outputSize": 300,
-				"pesNumber": 1,
-				"userRequestTime": 120.0,
-				"deadline": 181.5
-			},
-			{
-				"quantity": 10,
-				"long": 60,
-				"fileSize": 300,
-				"outputSize": 300,
-				"pesNumber": 1,
-				"userRequestTime": 180.0,
-				"deadline": 241.5
-			},
-			{
-				"quantity": 7,
-				"long": 60,
-				"fileSize": 300,
-				"outputSize": 300,
-				"pesNumber": 1,
-				"userRequestTime": 240.0,
-				"deadline": 301.5
-			},
-			{
-				"quantity": 8,
-				"long": 60,
+				"quantity": 15,
+				"long": 100,
 				"fileSize": 300,
 				"outputSize": 300,
 				"pesNumber": 1,
 				"userRequestTime": 300.0,
-				"deadline": 361.5
-			},
-		]	
+				"deadline": 601.5
+			}
+		]
 	},
 	{
-		"name": "A3",
+		"name": "HCMUS",
 		"datacenters": {
 			"quantity": 1,
 			"arch": "x86",
@@ -203,7 +139,7 @@
 				}
 			},
 			"vms": {
-				"quantity": 8,
+				"quantity": 10,
 				"mips": 1,
 				"size": 1000,
 				"ram": 1024,
@@ -214,60 +150,32 @@
 		},
 		"cloudlets": [
 			{
-				"quantity": 8,
-				"long": 60,
+				"quantity": 18,
+				"long": 100,
 				"fileSize": 300,
 				"outputSize": 300,
 				"pesNumber": 1,
 				"userRequestTime": 0.0,
-				"deadline": 61.5
+				"deadline": 201.5
 			},
 			{
-				"quantity": 9,
-				"long": 60,
+				"quantity": 22,
+				"long": 100,
 				"fileSize": 300,
 				"outputSize": 300,
 				"pesNumber": 1,
-				"userRequestTime": 60.0,
-				"deadline": 121.5
+				"userRequestTime": 100.0,
+				"deadline": 401.5
 			},
 			{
-				"quantity": 9,
-				"long": 60,
-				"fileSize": 300,
-				"outputSize": 300,
-				"pesNumber": 1,
-				"userRequestTime": 120.0,
-				"deadline": 181.5
-			},
-			{
-				"quantity": 15,
-				"long": 60,
-				"fileSize": 300,
-				"outputSize": 300,
-				"pesNumber": 1,
-				"userRequestTime": 180.0,
-				"deadline": 241.5
-			},
-			{
-				"quantity": 9,
-				"long": 60,
-				"fileSize": 300,
-				"outputSize": 300,
-				"pesNumber": 1,
-				"userRequestTime": 240.0,
-				"deadline": 301.5
-			},
-			{
-				"quantity": 6,
-				"long": 60,
+				"quantity": 25,
+				"long": 100,
 				"fileSize": 300,
 				"outputSize": 300,
 				"pesNumber": 1,
 				"userRequestTime": 300.0,
-				"deadline": 361.5
-			},
-			
+				"deadline": 601.5
+			}
 		]
 	}
 ]

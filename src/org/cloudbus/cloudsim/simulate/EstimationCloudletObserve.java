@@ -2,6 +2,8 @@ package org.cloudbus.cloudsim.simulate;
 
 import java.util.List;
 
+import org.cloudbus.cloudsim.Log;
+
 public class EstimationCloudletObserve {
 	private List<Integer> datacenterList;
 	private CustomResCloudlet resCloudlet;
@@ -45,7 +47,8 @@ public class EstimationCloudletObserve {
 		}
 		
 		double bestFinishTime = reResCloudlet.getBestFinishTime();
-		
+//		Log.printLine("Debug cloudlet #"+reResCloudlet.getCloudletId()+" in EstimationCLoudletObserve bestFinishTime: "+bestFinishTime);
+//		Log.printLine("Debug in EstimationCLoudletObserve deadline: "+ resCloudlet.getCloudlet().getDeadlineTime());
 		if (bestFinishTime < resCloudlet.getCloudlet().getDeadlineTime() && bestFinishTime < resCloudlet.getBestFinishTime()) {
 			cancel_waiting_exec[0] = resCloudlet.getBestDatacenterId();
 			cancel_waiting_exec[1] = resCloudlet.getBestVmId();
@@ -53,7 +56,7 @@ public class EstimationCloudletObserve {
 			resCloudlet.setBestFinishTime(bestFinishTime);
 			resCloudlet.setBestDatacenterId(datacenterID);
 			resCloudlet.setBestVmId(reResCloudlet.getBestVmId());
-		}
+		} 
 		
 		return cancel_waiting_exec;
 	}

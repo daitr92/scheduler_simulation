@@ -189,7 +189,9 @@ public class CustomDatacenter extends Datacenter {
 //		Log.printLine(CloudSim.clock()+ " estimating task #"+cl.getCloudletId()+ "; user request time "+ cl.getUserRequestTime());		
 		// time to transfer the files
 		double fileTransferTime = predictFileTransferTime(cl.getRequiredFiles());
-		
+		if(rcl.getCloudletId() == 20005){
+			Log.printLine("Stop for debug");
+		}
 		double bestFinishTime = Double.MAX_VALUE;
 		Vm bestVm = null;
 		for (Vm vm: getVmList()) {
