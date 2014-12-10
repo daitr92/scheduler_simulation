@@ -34,15 +34,17 @@ import org.json.simple.parser.JSONParser;
  */
 public class Simulate {
 	
-//	private static final String filePath = "C:\\Users\\Kahn\\Downloads\\testcase.json";
-	private static final String filePath = "/home/ngtrieuvi92/zz/scheduler_simulation/src/org/cloudbus/cloudsim/simulate/testcase_1.json";
+	private static final String testcaseFilePath = "C:\\Users\\Kahn\\Downloads\\testcase_2.json";
+//	private static final String testcaseFilePath = "/home/ngtrieuvi92/zz/scheduler_simulation/src/org/cloudbus/cloudsim/simulate/testcase_1.json";
 	
 	/**
 	 * if USER_ALPHA_RATIO = true; simulate will apply alpha ratio to calc, 
 	 * if USER_ALPHA_RATIO = false alpha ratio will be set 1:1
 	 */
 	
-	public static final boolean USER_ALPHA_RATIO = true;	
+	public static final boolean USER_ALPHA_RATIO = false;
+	
+	public static int cloudletLength = 0;
 	
 	private static List<DatacenterBroker> brokersList;
 
@@ -66,7 +68,7 @@ public class Simulate {
 			
 			
 			// Read data from json file
-			FileReader reader = new FileReader(filePath);
+			FileReader reader = new FileReader(testcaseFilePath);
 
             JSONParser jsonParser = new JSONParser();
             JSONArray members = (JSONArray) jsonParser.parse(reader);
@@ -99,6 +101,7 @@ public class Simulate {
 	            	int cloudletId_prefix = broker.getId() * 10000 + j * 1000;
 	            	
 	        		long length = (Long) m_cloudlet.get("long");
+	        		if (cloudletLength == 0) cloudletLength = (int) length;
 	        		long fileSize = (Long) m_cloudlet.get("fileSize");
 	        		long outputSize = (Long) m_cloudlet.get("outputSize");
 	        		int pesNumber = ((Long) m_cloudlet.get("pesNumber")).intValue();
