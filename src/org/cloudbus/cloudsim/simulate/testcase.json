@@ -1,0 +1,190 @@
+[
+	{
+		"name": "HCMUSSH",
+		"datacenters": {
+			"quantity": 1,
+			"arch": "x86",
+			"os": "Linux",
+			"vmm": "Xen",
+			"time_zone": 10.0,
+			"cost": 3.0,
+			"costPerMem": 0.05,
+			"costPerStorage": 0.001,
+			"costPerBw": 0.0,
+			"hosts": {
+				"quantity": 200,
+				"ram": 2048,
+				"storage": 100000,
+				"bw": 10000,
+				"pes": {
+					"mips": 5000,
+					"quantity": 10
+				}
+			},
+			"vms": {
+				"quantity": 2,
+				"mips": 1,
+				"size": 1000,
+				"ram": 1024,
+				"bw": 10,
+				"pesNumber": 1,
+				"vmm": "Xen"
+			}
+		},
+		"cloudlets": 
+		[
+			{
+				"quantity": 10,
+				"long": 100,
+				"fileSize": 300,
+				"outputSize": 300,
+				"pesNumber": 1,
+				"userRequestTime": 0.0,
+				"deadline": 201.0
+			},
+			{
+				"quantity": 2,
+				"long": 100,
+				"fileSize": 300,
+				"outputSize": 300,
+				"pesNumber": 1,
+				"userRequestTime": 100.0,
+				"deadline": 401.5
+			},
+			{
+				"quantity": 7,
+				"long": 100,
+				"fileSize": 300,
+				"outputSize": 300,
+				"pesNumber": 1,
+				"userRequestTime": 300.0,
+				"deadline": 601.5
+			}
+		]
+	},
+	{
+		"name": "HCMUT",
+		"datacenters": {
+			"quantity": 1,
+			"arch": "x86",
+			"os": "Linux",
+			"vmm": "Xen",
+			"time_zone": 10.0,
+			"cost": 3.0,
+			"costPerMem": 0.05,
+			"costPerStorage": 0.001,
+			"costPerBw": 0.0,
+			"hosts": {
+				"quantity": 200,
+				"ram": 2048,
+				"storage": 100000,
+				"bw": 10000,
+				"pes": {
+					"mips": 5000,
+					"quantity": 10
+				}
+			},
+			"vms": {
+				"quantity": 5,
+				"mips": 1,
+				"size": 1000,
+				"ram": 1024,
+				"bw": 10,
+				"pesNumber": 1,
+				"vmm": "Xen"
+			}
+		},
+		"cloudlets":
+		[
+			{
+				"quantity": 14,
+				"long": 100,
+				"fileSize": 300,
+				"outputSize": 300,
+				"pesNumber": 1,
+				"userRequestTime": 0.0,
+				"deadline": 201.5
+			},
+			{
+				"quantity": 20,
+				"long": 100,
+				"fileSize": 300,
+				"outputSize": 300,
+				"pesNumber": 1,
+				"userRequestTime": 300.0,
+				"deadline": 601.5
+			}
+		]
+	},
+	{
+		"name": "HCMUS",
+		"datacenters": {
+			"quantity": 1,
+			"arch": "x86",
+			"os": "Linux",
+			"vmm": "Xen",
+			"time_zone": 10.0,
+			"cost": 3.0,
+			"costPerMem": 0.05,
+			"costPerStorage": 0.001,
+			"costPerBw": 0.0,
+			"hosts": {
+				"quantity": 200,
+				"ram": 2048,
+				"storage": 100000,
+				"bw": 10000,
+				"pes": {
+					"mips": 5000,
+					"quantity": 10
+				}
+			},
+			"vms": {
+				"quantity": 10,
+				"mips": 1,
+				"size": 1000,
+				"ram": 1024,
+				"bw": 10,
+				"pesNumber": 1,
+				"vmm": "Xen"
+			}
+		},
+		"cloudlets": [
+			{
+				"quantity": 18,
+				"long": 100,
+				"fileSize": 300,
+				"outputSize": 300,
+				"pesNumber": 1,
+				"userRequestTime": 0.0,
+				"deadline": 201.5
+			},
+			{
+				"quantity": 22,
+				"long": 100,
+				"fileSize": 300,
+				"outputSize": 300,
+				"pesNumber": 1,
+				"userRequestTime": 100.0,
+				"deadline": 401.5
+			},
+			{
+				"quantity": 15,
+				"long": 100,
+				"fileSize": 300,
+				"outputSize": 300,
+				"pesNumber": 1,
+				"userRequestTime": 200.0,
+				"deadline": 501.5
+			},
+			{
+				"quantity": 25,
+				"long": 100,
+				"fileSize": 300,
+				"outputSize": 300,
+				"pesNumber": 1,
+				"userRequestTime": 300.0,
+				"deadline": 601.5
+			}
+		]
+	}
+]

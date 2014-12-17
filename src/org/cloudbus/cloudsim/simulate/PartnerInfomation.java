@@ -115,7 +115,8 @@ public class PartnerInfomation {
 		if(this.getRatio() == 0 ){
 			k = 1;
 		} else {
-			k = Math.abs(getLenghtRatio()/getRatio()-1);
+//			k = Math.abs(getLenghtRatio()/getRatio()-1);
+			k = getLenghtRatio()/getRatio() - 1;
 		}
 		return k;
 	}

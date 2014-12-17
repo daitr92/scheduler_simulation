@@ -309,8 +309,8 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 		}
 		for(PartnerInfomation pInfo :partnersList){
 			if(pInfo.getPartnerId() == currentBestPartner.getPartnerId()){
-				pInfo.updateLenghtRatio(currentBestPartner.getRequested(), 0);
 				pInfo.setRequested(currentBestPartner.getRequested()+pInfo.getRequested());
+				pInfo.updateLenghtRatio(currentBestPartner.getRequested(), 0);
 				pInfo.updateKRatio();
 //				pInfo.setkRatio(currentBestPartner.getkRatio());
 //				Log.printLine("updated partner info");
@@ -359,10 +359,12 @@ public class CustomDatacenterBroker extends DatacenterBroker {
 				int item_size = item.getVmList().size();
 				if(Simulate.USER_ALPHA_RATIO){
 					double alphaRatio = (double)ownVMSize/item_size;
-					 partnerInfoItem   = new PartnerInfomation(en.getId(), alphaRatio,ownVMSize*10,item_size*10);
+					 partnerInfoItem   = new PartnerInfomation(en.getId(), alphaRatio,
+							 ownVMSize*Simulate.cloudletLength, item_size*Simulate.cloudletLength);
 				}
 				else {
-					partnerInfoItem   = new PartnerInfomation(en.getId(), 1,10,10);
+					partnerInfoItem   = new PartnerInfomation(en.getId(), 1, 
+							Simulate.cloudletLength, Simulate.cloudletLength);
 				}
 
 				
