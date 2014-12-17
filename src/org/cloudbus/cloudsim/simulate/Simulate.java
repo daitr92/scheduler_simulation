@@ -35,7 +35,7 @@ import org.json.simple.parser.JSONParser;
 public class Simulate {
 	
 //	private static final String filePath = "C:\\Users\\Kahn\\Downloads\\testcase.json";
-	private static final String filePath = "/home/ngtrieuvi92/zz/scheduler_simulation/src/org/cloudbus/cloudsim/simulate/testcase_1.json";
+	private static final String filePath = "/home/ngtrieuvi92/zz/scheduler_simulation/src/org/cloudbus/cloudsim/simulate/testcase/testcase_1.json";
 	
 	/**
 	 * if USER_ALPHA_RATIO = true; simulate will apply alpha ratio to calc, 
@@ -63,7 +63,6 @@ public class Simulate {
 			Calendar calendar = Calendar.getInstance(); 
 			boolean trace_flag = false;
 			CloudSim.init(num_user, calendar, trace_flag);
-			
 			
 			// Read data from json file
 			FileReader reader = new FileReader(filePath);
@@ -117,8 +116,7 @@ public class Simulate {
 
             	broker.submitCloudletList(cloudletList);
             }
-            
-            
+                        
 			CloudSim.startSimulation();
 			CloudSim.stopSimulation();
 
@@ -192,7 +190,7 @@ public class Simulate {
 				broker.addDatacenter(datacenter.getId());
 				
 				List<Vm> vmList = new ArrayList<Vm>();
-            	JSONObject m_vm = (JSONObject) d_info.get("vms");
+				JSONArray m_vm = (JSONArray) d_info.get("vms");
             	createVm(vmList, m_vm, broker, i);
             	broker.submitVmList(vmList);
 				
@@ -202,30 +200,36 @@ public class Simulate {
 		}
 	}
 	
-	private static void createVm(List<Vm> vmList, JSONObject m_vm, CustomDatacenterBroker broker, int datacenterIndex) {
+	private static void createVm(List<Vm> vmList, JSONArray m_vms, CustomDatacenterBroker broker, int datacenterIndex) {
 		String brokerName = broker.getName();
-		int vm_quantity = ((Long) m_vm.get("quantity")).intValue();
-		int vmId_prefix = broker.getId() * 1000 + datacenterIndex * 100;
-		for (int i = 0; i < vm_quantity; i++) {
-			int mips = ((Long) m_vm.get("mips")).intValue();
-			long size = (Long) m_vm.get("size"); // image size (MB)
-			int ram = ((Long) m_vm.get("ram")).intValue(); // vm memory (MB)
-			long bw = (Long) m_vm.get("bw");
-			int pesNumber = ((Long) m_vm.get("pesNumber")).intValue(); // number of cpus
-			String vmm = "Xen"; // VMM name
-			int vmId = vmId_prefix + i;
-			
-			CloudletSchedulerSpaceShared scheduler = new CloudletSchedulerSpaceShared();
-			scheduler.setMips(mips);
+		for (int m_vm_index = 0; m_vm_index < m_vms.size(); m_vm_index++) {
+			JSONObject m_vm = (JSONObject) m_vms.get(m_vm_index);
+			int vm_quantity = ((Long) m_vm.get("quantity")).intValue();
+			int vmId_prefix = broker.getId() * 10000  + m_vm_index * 1000 + datacenterIndex * 100;
+			for (int i = 0; i < vm_quantity; i++) {
+				int mips = ((Long) m_vm.get("mips")).intValue();
+				long size = (Long) m_vm.get("size"); // image size (MB)
+				int ram = ((Long) m_vm.get("ram")).intValue(); // vm memory (MB)
+				long bw = (Long) m_vm.get("bw");
+				long startTime = ((Long) m_vm.get("startTime"));
+				int pesNumber = ((Long) m_vm.get("pesNumber")).intValue(); // number of cpus
+				String vmm = "Xen"; // VMM name
+				int vmId = vmId_prefix + i;
+				
+				CloudletSchedulerSpaceShared scheduler = new CloudletSchedulerSpaceShared();
+				scheduler.setMips(mips);
 
-			// create VM
-			Vm vm = new Vm(vmId, broker.getId(), mips, pesNumber, ram, bw, size, vmm,
-					scheduler);
-			
-			vmList.add(vm);
+				// create VM
+				Vm vm = new Vm(vmId, broker.getId(), mips, pesNumber, ram, bw, size,startTime, vmm,
+						scheduler);
+				
+				vmList.add(vm);
 
-			Log.printLine(brokerName + ": creating Vm #" + vmId);
+				Log.printLine(brokerName + ": creating Vm #" + vmId);
+			}
 		}
+		
+		
 	}
 
 	

@@ -70,6 +70,8 @@ public class Vm {
 	/** The current allocated mips. */
 	private List<Double> currentAllocatedMips;
 
+	/** Starttime of vm */
+	private long startTime;
 	/** The VM is being instantiated. */
 	private boolean beingInstantiated;
 
@@ -106,6 +108,7 @@ public class Vm {
 			int ram,
 			long bw,
 			long size,
+			long startTime,
 			String vmm,
 			CloudletScheduler cloudletScheduler) {
 		setId(id);
@@ -117,6 +120,7 @@ public class Vm {
 		setBw(bw);
 		setSize(size);
 		setVmm(vmm);
+		setStartTime(startTime);
 		setCloudletScheduler(cloudletScheduler);
 
 		setInMigration(false);
@@ -604,6 +608,14 @@ public class Vm {
 			}
 		}
 		getStateHistory().add(newState);
+	}
+
+	public long getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(long startTime) {
+		this.startTime = startTime;
 	}
 
 }

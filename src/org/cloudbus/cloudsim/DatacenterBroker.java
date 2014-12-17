@@ -319,10 +319,18 @@ public class DatacenterBroker extends SimEntity {
 		String datacenterName = CloudSim.getEntityName(datacenterId);
 		for (Vm vm : getVmList()) {
 			if (!getVmsToDatacentersMap().containsKey(vm.getId())) {
-				Log.printLine(CloudSim.clock() + ": " + getName() + ": Trying to Create VM #" + vm.getId()
-						+ " in " + datacenterName);
-				sendNow(datacenterId, CloudSimTags.VM_CREATE_ACK, vm);
-				requestedVms++;
+				if(vm.getStartTime() == 0.0  || vm.getStartTime() < CloudSim.clock() ) {
+					Log.printLine(CloudSim.clock() + ": " + getName() + ": Trying to Create VM #" + vm.getId()
+							+ " in " + datacenterName);
+					sendNow(datacenterId, CloudSimTags.VM_CREATE_ACK, vm);
+				} 
+				else {
+					double delay = vm.getStartTime() - CloudSim.clock();
+					Log.printLine(CloudSim.clock() + ": " + getName() + ": delay Create VM #" + vm.getId()
+							+ " in " + datacenterName +" in "+ delay +"s");
+					send(datacenterId,delay , CloudSimTags.VM_CREATE_ACK, vm);
+				}
+			requestedVms++;	
 			}
 		}
 
